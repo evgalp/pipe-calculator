@@ -36,3 +36,24 @@ gulp.task('watch', ['browser-sync', 'less'], function() {
     gulp.watch('app/*.html', browserSync.reload); // Наблюдение за HTML файлами в корне проекта
     gulp.watch('app/js/**/*.js', browserSync.reload); // Наблюдение за JS файлами в папке js
 });
+
+gulp.task('build', ['clean', 'img', 'sass', 'scripts'], function() {
+
+    var buildCss = gulp.src([ // Переносим библиотеки в продакшен
+        'app/css/main.css',
+        'app/css/libs.min.css'
+        ])
+    .pipe(gulp.dest('dist/css'))
+
+    var buildFonts = gulp.src('app/fonts/**/*') // Переносим шрифты в продакшен
+    .pipe(gulp.dest('dist/fonts'))
+
+    var buildJs = gulp.src('app/js/**/*') // Переносим скрипты в продакшен
+    .pipe(gulp.dest('dist/js'))
+
+    var buildHtml = gulp.src('app/*.html') // Переносим HTML в продакшен
+    .pipe(gulp.dest('dist'));
+
+});
+
+gulp.task('default', ['watch']);
