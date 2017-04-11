@@ -4,6 +4,8 @@ var gulp = require('gulp'), // Подключаем Gulp
     concat = require('gulp-concat'), // Подключаем gulp-concat (для конкатенации файлов)
     uglify = require('gulp-uglifyjs'), // Подключаем gulp-uglifyjs (для сжатия JS)
     autoprefixer = require('gulp-autoprefixer');
+    del = require('del');
+
 
 gulp.task('less', function(){ // Создаем таск less
     return gulp.src('app/less/**/*.less') // Берем источник
@@ -22,14 +24,14 @@ gulp.task('browser-sync', function() { // Создаем таск browser-sync
     });
 });
 
-// gulp.task('scripts', function() {
-//     return gulp.src([ // Берем все необходимые библиотеки
-//         'app/libs/jquery/dist/main.js'
-//         ])
-//         .pipe(concat('libs.min.js')) // Собираем их в кучу в новом файле libs.min.js
-//         .pipe(uglify()) // Сжимаем JS файл
-//         .pipe(gulp.dest('app/js')); // Выгружаем в папку app/js
-// });
+gulp.task('scripts', function() {
+    return gulp.src([ // Берем все необходимые библиотеки
+        // 'app/libs/jquery/dist/main.js'
+        ])
+        .pipe(concat('libs.min.js')) // Собираем их в кучу в новом файле libs.min.js
+        .pipe(uglify()) // Сжимаем JS файл
+        .pipe(gulp.dest('app/js')); // Выгружаем в папку app/js
+});
 
 gulp.task('watch', ['browser-sync', 'less'], function() {
     gulp.watch('app/less/**/*.less', ['less']); // Наблюдение за less файлами в папке less
@@ -37,10 +39,15 @@ gulp.task('watch', ['browser-sync', 'less'], function() {
     gulp.watch('app/js/**/*.js', browserSync.reload); // Наблюдение за JS файлами в папке js
 });
 
-gulp.task('build', ['clean', 'img', 'sass', 'scripts'], function() {
+gulp.task('clean', function() {
+    return del.sync('dist'); // Удаляем папку dist перед сборкой
+});
+
+
+gulp.task('build', ['clean', 'less', 'scripts'], function() {
 
     var buildCss = gulp.src([ // Переносим библиотеки в продакшен
-        'app/css/main.css',
+        'app/css/style.css',
         'app/css/libs.min.css'
         ])
     .pipe(gulp.dest('dist/css'))
