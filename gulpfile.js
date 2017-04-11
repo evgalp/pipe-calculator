@@ -6,6 +6,13 @@ var gulp = require('gulp'), // Подключаем Gulp
     autoprefixer = require('gulp-autoprefixer');
     del = require('del');
 
+var ghPages = require('gulp-gh-pages');
+
+gulp.task('deploy', function() {
+  return gulp.src('../dist/**/*')
+    .pipe(ghPages());
+});
+
 
 gulp.task('less', function(){ // Создаем таск less
     return gulp.src('app/less/**/*.less') // Берем источник
