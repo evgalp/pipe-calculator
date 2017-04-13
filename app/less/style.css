@@ -168,3 +168,6 @@ header .title {
 .main-menu .menuButtonColorSecondary {
   background: #f2f4f6;
 }
+.test {
+  display: flex;
+}
