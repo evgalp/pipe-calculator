@@ -18,7 +18,7 @@ gulp.task('less', function(){ // Создаем таск less
 gulp.task('browser-sync', function() { // Создаем таск browser-sync
     browserSync({ // Выполняем browserSync
         server: { // Определяем параметры сервера
-            baseDir: 'app' // Директория для сервера - app
+            baseDir: '' // Директория для сервера - app
         },
         notify: false // Отключаем уведомления
     });
@@ -37,30 +37,6 @@ gulp.task('watch', ['browser-sync', 'less'], function() {
     gulp.watch('less/**/*.less', ['less']); // Наблюдение за less файлами в папке less
     gulp.watch('*.html', browserSync.reload); // Наблюдение за HTML файлами в корне проекта
     gulp.watch('js/**/*.js', browserSync.reload); // Наблюдение за JS файлами в папке js
-});
-
-gulp.task('clean', function() {
-    return del.sync('dist'); // Удаляем папку dist перед сборкой
-});
-
-
-gulp.task('build', ['clean', 'less', 'scripts'], function() {
-
-    var buildCss = gulp.src([ // Переносим библиотеки в продакшен
-        'css/style.css',
-        'css/libs.min.css'
-        ])
-    .pipe(gulp.dest('dist/css'))
-
-    var buildFonts = gulp.src('fonts/**/*') // Переносим шрифты в продакшен
-    .pipe(gulp.dest('dist/fonts'))
-
-    var buildJs = gulp.src('js/**/*') // Переносим скрипты в продакшен
-    .pipe(gulp.dest('dist/js'))
-
-    var buildHtml = gulp.src('*.html') // Переносим HTML в продакшен
-    .pipe(gulp.dest('dist'));
-
 });
 
 gulp.task('default', ['watch']);
