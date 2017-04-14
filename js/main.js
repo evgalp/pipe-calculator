@@ -1,9 +1,8 @@
-
-
 var rollSize = {};
 var guidePlane = {};
+var guidePlaneProfile = {};
 
-// RollingMill - mill constructor function
+//constructors
 
 function RollingMill(baseRollDiameter, sigmaHalf, alpha, n, carriageStrokeLength, diametersMaxRelation, L, carriageStrokeLengthRotational, reductionSectionLength, trunnionDiameter, DkDcMax, m){
 
@@ -24,8 +23,6 @@ function RollingMill(baseRollDiameter, sigmaHalf, alpha, n, carriageStrokeLength
 	return this;
 }
 
-// Route - route constructor function
-
 function Route(billetDiameterInitial, billetDiameterFinal, billetWallThicknessInitial, billetWallThicknessFinal){
 
 	this.billetDiameterInitial = billetDiameterInitial;
@@ -42,15 +39,19 @@ function toRadians (angle) {
   return angle * (Math.PI / 180);
 }
 
-// declare variables - mills
+function precisionLimits(route){
+	if(route.billetWallThicknessInitial < 1){
+		sigmaT = 0.12;
+	}
+	if(route.billetWallThicknessInitial > 1){
+		sigmaT = 0.10;
+	}
+	return sigmaT;
+}
 
 var millOne =  new RollingMill(82, 0.5, 60, 3, 455, 1.6, 210, 69, 12, 45, 1.6, 4.55);
 
-// declare variables - route
-
 var routeOne = new Route(17.5, 16.3, 0.7, 0.35);
-
-// calc functions
 
 function calcRollSize(mill, route){
 
@@ -95,18 +96,42 @@ function calcGuidePlaneSize(mill, route){
 	guidePlane.wallReductionSection = guidePlane.workLength - (guidePlane.ln + mill.reductionSectionLength + guidePlane.horizontalSection + guidePlane.calibratingSection); 
 }
 
-// console.log(calcRollSize(millOne, routeOne));
+function calcGuidePlaneProfile(mill, route){
+	guidePlaneProfile.oneSectionLength = guidePlane.wallReductionSection / 7;
+	guidePlaneProfile.tp = precisionLimits(route) + route.billetWallThicknessInitial;
+	guidePlaneProfile.ut = guidePlaneProfile.tp / route.billetWallThicknessFinal;
+	
+	guidePlaneProfile.u1 = (guidePlaneProfile.ut + 4.333) / 5.333;
+	guidePlaneProfile.u2 = (guidePlaneProfile.ut + 1.9091) / 2.9091;
+	guidePlaneProfile.u3 = (guidePlaneProfile.ut + 0.8824) / 1.8824;
+	guidePlaneProfile.u4 = (guidePlaneProfile.ut + 0.5238) / 1.5238;
+	guidePlaneProfile.u5 = (guidePlaneProfile.ut + 0.28) / 1.28;
+	guidePlaneProfile.u6 = (guidePlaneProfile.ut + 0.1236) / 1.1236;
+	guidePlaneProfile.u7 = guidePlaneProfile.ut;
+
+	guidePlaneProfile.t1 = guidePlaneProfile.tp / guidePlaneProfile.u1;
+	guidePlaneProfile.t2 = guidePlaneProfile.tp / guidePlaneProfile.u2;
+	guidePlaneProfile.t3 = guidePlaneProfile.tp / guidePlaneProfile.u3;
+	guidePlaneProfile.t4 = guidePlaneProfile.tp / guidePlaneProfile.u4;
+	guidePlaneProfile.t5 = guidePlaneProfile.tp / guidePlaneProfile.u5;
+	guidePlaneProfile.t6 = guidePlaneProfile.tp / guidePlaneProfile.u6;
+	guidePlaneProfile.t7 = guidePlaneProfile.tp / guidePlaneProfile.u7;
+
+}
+
 calcRollSize(millOne, routeOne);
 calcGuidePlaneSize(millOne, routeOne);
+calcGuidePlaneProfile(millOne, routeOne);
 
 // console.log(millOne);
 // console.log(rollSize);
 // console.log(guidePlane);
+console.log(guidePlaneProfile);
 
-console.table([millOne]);
-console.table([rollSize]);
-console.table([guidePlane]);
-
+// console.table([millOne]);
+// console.table([rollSize]);
+// console.table([guidePlane]);
+// console.table([guidePlaneProfile]);
 
 
 

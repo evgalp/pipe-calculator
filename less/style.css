@@ -141,6 +141,28 @@ header .title {
   text-align: center;
   color: #fff;
 }
+header .title-small {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 20px;
+  width: 100%;
+}
+header .title-small span {
+  font-size: 30px;
+  color: #fff;
+}
+header .title-small .home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header .title-small .home svg {
+  width: 100px;
+  height: 100px;
+  fill: #fff;
+  stroke-width: 1;
+}
 .main-menu {
   display: flex;
   flex-wrap: wrap;
@@ -159,33 +181,36 @@ header .title {
 .main-menu .button:hover {
   background: #F2F2FB;
 }
-.main-menu .button:hover .icon svg {
+.main-menu .button:hover .container .icon svg {
   fill: #0065F4;
 }
-.main-menu .button:hover .icon svg path {
+.main-menu .button:hover .container .icon svg path {
   stroke: #0065F4;
 }
-.main-menu .button:hover .text {
+.main-menu .button:hover .container .text {
   color: #0065F4;
 }
-.main-menu .button .icon {
+.main-menu .button .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.main-menu .button .container .icon {
   width: 80px;
   height: 80px;
-  position: absolute;
-  margin-top: 130px;
 }
-.main-menu .button .icon svg {
+.main-menu .button .container .icon svg {
   width: 80px;
   height: 80px;
   fill: #006591;
 }
-.main-menu .button .icon svg path {
+.main-menu .button .container .icon svg path {
   stroke: #006591;
 }
-.main-menu .button .text {
+.main-menu .button .container .text {
   color: #006591;
   font-size: 25px;
   text-align: center;
-  margin-bottom: 60px;
-  align-self: flex-end;
+  padding-top: 20px;
 }
