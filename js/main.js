@@ -100,22 +100,31 @@ function calcGuidePlaneProfile(mill, route){
 	guidePlaneProfile.oneSectionLength = guidePlane.wallReductionSection / 7;
 	guidePlaneProfile.tp = precisionLimits(route) + route.billetWallThicknessInitial;
 	guidePlaneProfile.ut = guidePlaneProfile.tp / route.billetWallThicknessFinal;
-	
-	guidePlaneProfile.u1 = (guidePlaneProfile.ut + 4.333) / 5.333;
-	guidePlaneProfile.u2 = (guidePlaneProfile.ut + 1.9091) / 2.9091;
-	guidePlaneProfile.u3 = (guidePlaneProfile.ut + 0.8824) / 1.8824;
-	guidePlaneProfile.u4 = (guidePlaneProfile.ut + 0.5238) / 1.5238;
-	guidePlaneProfile.u5 = (guidePlaneProfile.ut + 0.28) / 1.28;
-	guidePlaneProfile.u6 = (guidePlaneProfile.ut + 0.1236) / 1.1236;
-	guidePlaneProfile.u7 = guidePlaneProfile.ut;
 
-	guidePlaneProfile.t1 = guidePlaneProfile.tp / guidePlaneProfile.u1;
-	guidePlaneProfile.t2 = guidePlaneProfile.tp / guidePlaneProfile.u2;
-	guidePlaneProfile.t3 = guidePlaneProfile.tp / guidePlaneProfile.u3;
-	guidePlaneProfile.t4 = guidePlaneProfile.tp / guidePlaneProfile.u4;
-	guidePlaneProfile.t5 = guidePlaneProfile.tp / guidePlaneProfile.u5;
-	guidePlaneProfile.t6 = guidePlaneProfile.tp / guidePlaneProfile.u6;
-	guidePlaneProfile.t7 = guidePlaneProfile.tp / guidePlaneProfile.u7;
+	var u = [];
+
+	u[0] = (guidePlaneProfile.ut + 4.333) / 5.333;
+	u[1] = (guidePlaneProfile.ut + 1.9091) / 2.9091;
+	u[2] = (guidePlaneProfile.ut + 0.8824) / 1.8824;
+	u[3] = (guidePlaneProfile.ut + 0.5238) / 1.5238;
+	u[4] = (guidePlaneProfile.ut + 0.28) / 1.28;
+	u[5] = (guidePlaneProfile.ut + 0.1236) / 1.1236;
+	u[6] = guidePlaneProfile.ut;
+
+	guidePlaneProfile.u = u;
+
+	guidePlaneProfile.t = u.map(function(u){
+		return guidePlaneProfile.tp / u;
+	});
+
+	guidePlaneProfile.yi = guidePlaneProfile.t.map(function(t){
+		return t - route.billetWallThicknessFinal;
+	});
+
+	guidePlaneProfile.yp = guidePlaneProfile.tp - route.billetWallThicknessFinal;
+
+	
+
 
 }
 
