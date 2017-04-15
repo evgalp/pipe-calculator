@@ -123,10 +123,17 @@ function calcGuidePlaneProfile(mill, route){
 
 	guidePlaneProfile.yp = guidePlaneProfile.tp - route.billetWallThicknessFinal;
 
-	
+	guidePlaneProfile.bp = (guidePlaneProfile.yp * mill.L) / (0.5 * guidePlane.lb + guidePlane.calibratingSection + guidePlane.horizontalSection + (7 - 0) * guidePlaneProfile.oneSectionLength);
 
+	var n = [1, 2, 3, 4, 5, 6, 7];
+
+	guidePlaneProfile.bi = guidePlaneProfile.yi.map(function(y, idx){
+		return ( (y * mill.L) / (0.5 * guidePlane.lb + guidePlane.calibratingSection + guidePlane.horizontalSection + (7 - n[idx]) * guidePlaneProfile.oneSectionLength) );
+	});
 
 }
+
+
 
 calcRollSize(millOne, routeOne);
 calcGuidePlaneSize(millOne, routeOne);
