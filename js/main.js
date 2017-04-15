@@ -1,6 +1,7 @@
 var rollSize = {};
 var guidePlane = {};
 var guidePlaneProfile = {};
+var deformation = {};
 
 //constructors
 
@@ -33,6 +34,15 @@ function Route(billetDiameterInitial, billetDiameterFinal, billetWallThicknessIn
 	return this;
 }
 
+function Material(sigmaB1, sigmaB2, k1, k2){
+	this.sigmaB1 = sigmaB1;
+	this.sigmaB2 = sigmaB2;
+	this.k1 = k1;
+	this.k2 = k2;
+
+	return this;
+}
+
 // other service functions
 
 function toRadians (angle) {
@@ -49,9 +59,15 @@ function precisionLimits(route){
 	return sigmaT;
 }
 
+// main objects
+
 var millOne =  new RollingMill(82, 0.5, 60, 3, 455, 1.6, 210, 69, 12, 45, 1.6, 4.55);
 
 var routeOne = new Route(17.5, 16.3, 0.7, 0.35);
+
+var materialOne = new Material(660, 720, 693, 756);
+
+// functions
 
 function calcRollSize(mill, route){
 
@@ -62,6 +78,16 @@ function calcRollSize(mill, route){
 	rollSize.rebordMinimalThickness = 0.7 * (route.billetDiameterFinal / 2) * (1 - Math.cos(mill.alpha));
 
 	rollSize.effectiveRollDiameter = rollSize.bottomRollDiameter + 0.2 * route.billetDiameterFinal;
+
+	rollSize.alpha = toRadians(180 / mill.n);
+
+	rollSize.beta = toRadians(15);
+
+	rollSize.delta = (guidePlaneProfile.tp - guidePlaneProfile.t[0]) / Math.sin(rollSize.alpha);
+
+	rollSize.gamma = Math.asin(rollSize.delta / route.billetDiameterFinal);
+
+	rollSize.reductionRadius = (route.billetDiameterFinal / 2) * (1 + ( (4 * (Math.cos(rollSize.alpha + rollSize.gamma))**2 - 1 ) / (2 - 2 * Math.cos(rollSize.beta) * Math.cos(rollSize.alpha + rollSize.gamma)) ));
 
 }
 
@@ -131,18 +157,37 @@ function calcGuidePlaneProfile(mill, route){
 		return ( (y * mill.L) / (0.5 * guidePlane.lb + guidePlane.calibratingSection + guidePlane.horizontalSection + (7 - n[idx]) * guidePlaneProfile.oneSectionLength) );
 	});
 
+	// rob - in rollSize
+
+}
+
+function calcDeformation(mill, route, material){
+	deformation.wallReductionOne = guidePlaneProfile.tp - guidePlaneProfile.t[0];
+	deformation.wallReductionTwo = guidePlaneProfile.t[0] - guidePlaneProfile.t[1];
+	deformation.rogr = rollSize.bottomRollDiameter / 2;
+	deformation.deltaOne = 0.35 * Math.sqrt(deformation.rogr / deformation.wallReductionOne);
+	deformation.deltaTwo = 0.35 * Math.sqrt(deformation.rogr / deformation.wallReductionTwo);
+	deformation.elongationOne = guidePlaneProfile.tp / guidePlaneProfile.t[0];
+	deformation.elongationTwo = guidePlaneProfile.tp / guidePlaneProfile.t[1];
+	deformation.epsilonOne = (1 - 1 / deformation.elongationOne) * 100;
+	deformation.epsilonTwo = (1 - 1 / deformation.elongationTwo) * 100;
+
+
+
 }
 
 
 
-calcRollSize(millOne, routeOne);
 calcGuidePlaneSize(millOne, routeOne);
 calcGuidePlaneProfile(millOne, routeOne);
+calcRollSize(millOne, routeOne);
+calcDeformation(millOne, routeOne, materialOne);
 
 // console.log(millOne);
 // console.log(rollSize);
 // console.log(guidePlane);
-console.log(guidePlaneProfile);
+// console.log(guidePlaneProfile);
+console.log(deformation);
 
 // console.table([millOne]);
 // console.table([rollSize]);
