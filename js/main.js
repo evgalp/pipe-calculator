@@ -1,7 +1,11 @@
 var rollSize = {};
-var guidePlane = {};
+// var guidePlane = {};
 var guidePlaneProfile = {};
 var deformation = {};
+
+// var activeMill = {};
+var activeRoute = {};
+var activeMaterial = {};
 
 //constructors
 
@@ -63,7 +67,7 @@ var millOne =  new RollingMill(82, 0.5, 60, 3, 455, 1.6, 210, 69, 12, 45, 1.6, 4
 
 var routeOne = new Route(17.5, 16.3, 0.7, 0.35);
 
-var materialOne = new Material(660, 720, 693, 756);
+// var materialOne = new Material(660, 720, 693, 756);
 
 // functions
 
@@ -90,6 +94,8 @@ function calcRollSize(mill, route){
 }
 
 function calcGuidePlaneSize(mill, route){
+
+	var guidePlane = {};
 
 	guidePlane.workLength = (mill.carriageStrokeLength) / (1 + mill.DkDcMax);
 
@@ -118,6 +124,8 @@ function calcGuidePlaneSize(mill, route){
 	guidePlane.calibratingSection = (4 * guidePlane.elongation * mill.m) / (rollSize.effectiveRollDiameter / mill.trunnionDiameter);
 
 	guidePlane.wallReductionSection = guidePlane.workLength - (guidePlane.ln + mill.reductionSectionLength + guidePlane.horizontalSection + guidePlane.calibratingSection); 
+
+	return guidePlane;
 }
 
 function calcGuidePlaneProfile(mill, route){
@@ -182,16 +190,16 @@ function calcDeformation(mill, route, material){
 
 
 
-calcGuidePlaneSize(millOne, routeOne);
-calcGuidePlaneProfile(millOne, routeOne);
-calcRollSize(millOne, routeOne);
-calcDeformation(millOne, routeOne, materialOne);
+// calcGuidePlaneSize(millOne, routeOne);
+// calcGuidePlaneProfile(millOne, routeOne);
+// calcRollSize(millOne, routeOne);
+// calcDeformation(millOne, routeOne, materialOne);
 
 // console.log(millOne);
 // console.log(rollSize);
 // console.log(guidePlane);
 // console.log(guidePlaneProfile);
-console.log(deformation);
+// console.log(deformation);
 
 // console.table([millOne]);
 // console.table([rollSize]);
@@ -199,5 +207,49 @@ console.log(deformation);
 // console.table([guidePlaneProfile]);
 
 
+// DOM interactions
+
+function getSelectedMill(){
+	var e = document.getElementById("millSelect");
+	var selctedMill = e.options[e.selectedIndex].value;
+	return selctedMill;
+}
+
+function createMillObj(){
+	if(getSelectedMill() == 'mill_15_30'){
+		var activeMill = new RollingMill(82, 0.5, 60, 3, 455, 1.6, 210, 69, 12, 45, 1.6, 4.55);
+	}
+	return activeMill;
+}
+
+function createRouteObj(){
+	var billetDiameterInitial = document.getElementById("billetDiameterInitial").value;
+	var billetDiameterFinal = document.getElementById("billetDiameterFinal").value;
+	var billetWallThicknessInitial = document.getElementById("billetWallThicknessInitial").value;
+
+	var billetWallThicknessFinal = document.getElementById("billetWallThicknessFinal").value;
+
+	var activeRoute = new Route (billetDiameterInitial, billetDiameterFinal, billetWallThicknessInitial, billetWallThicknessFinal);
+
+	return activeRoute;
+}
+
+const makeCalc = document.getElementById("makeCalc");
 
 
+makeCalc.addEventListener('click', function(){
+	var activeMill = createMillObj();
+	var activeRoute = createRouteObj();
+	var result = calcGuidePlaneSize(activeMill, activeRoute);
+	console.log(result);
+
+	var resultElem = document.getElementById('resultElem');
+	resultElem.innerHTML = 'Yp is ' + result.Yp;
+
+})
+
+function preCalc(){
+	var activeMill = createMillObj();
+	var activeRoute = createRouteObj();
+	return calcGuidePlaneSize(activeMill, activeRoute);
+}

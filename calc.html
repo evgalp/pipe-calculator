@@ -42,6 +42,7 @@
 	</header>
 
 	<div class="calc-form">
+
 		<div class="mill-selection">
 			<span>Оберіть тип стану ХПТР</span>
 			<select name="millSelect" id="millSelect">
@@ -49,6 +50,7 @@
 				<option value="mill_15_30">ХПТР 15-30</option>
 			</select>
 		</div>
+
 		<div class="route-selection">
 			<span>Визначте маршрут:</span>
 			<div class="item">
@@ -68,6 +70,20 @@
 				<input id="billetWallThicknessFinal" type="text">
 			</div>
 		</div>
+
+		<div class="material">
+			<span class="text">Оберіть матеріал</span>
+			<select name="material-selection" id="material-selection">
+				<option value="steel_20A">Сталь 20А</option>
+			</select>
+		</div>
+
+		<div class="calculate">
+			<button id="makeCalc">Allah Akbar !!!</button>
+		</div>
+
+		<div id="resultElem"></div>
+
 	</div>
 
 	<script type="text/javascript" src="js/main.js"></script>
