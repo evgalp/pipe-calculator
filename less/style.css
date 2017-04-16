@@ -214,3 +214,22 @@ header .title-small .home svg {
   text-align: center;
   padding-top: 20px;
 }
+.calc-form {
+  margin-left: 20px;
+}
+.calc-form select {
+  width: 200px;
+  height: 50px;
+  margin: 20px 0;
+  display: block;
+  font-weight: 700;
+  font-size: 25px;
+}
+.calc-form .route-selection .item {
+  max-width: 500px;
+  display: flex;
+  margin: 5px 0;
+}
+.calc-form .route-selection .item .text {
+  min-width: 230px;
+}

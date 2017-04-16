@@ -34,11 +34,9 @@ function Route(billetDiameterInitial, billetDiameterFinal, billetWallThicknessIn
 	return this;
 }
 
-function Material(sigmaB1, sigmaB2, k1, k2){
+function Material(sigmaB1, sigmaB2){
 	this.sigmaB1 = sigmaB1;
 	this.sigmaB2 = sigmaB2;
-	this.k1 = k1;
-	this.k2 = k2;
 
 	return this;
 }
@@ -171,9 +169,15 @@ function calcDeformation(mill, route, material){
 	deformation.elongationTwo = guidePlaneProfile.tp / guidePlaneProfile.t[1];
 	deformation.epsilonOne = (1 - 1 / deformation.elongationOne) * 100;
 	deformation.epsilonTwo = (1 - 1 / deformation.elongationTwo) * 100;
-
-
-
+	deformation.k1 = 1.05 * material.sigmaB1;
+	deformation.k2 = 1.05 * material.sigmaB2;
+	deformation.forwardSlipZonePressureOne = (deformation.k1 / deformation.deltaOne) * ((deformation.deltaOne - 1) * ((guidePlaneProfile.tp / guidePlaneProfile.t[0])**deformation.delta) - 1);
+	deformation.backwardSlipZonePressureOne = (deformation.k1 / deformation.deltaOne) * ((deformation.deltaOne - 1) * ((guidePlaneProfile.tp / guidePlaneProfile.t[0])**deformation.deltaOne) - 1);
+	deformation.backwardSlipZonePressureTwo = (deformation.k2 / deformation.deltaTwo) * ((deformation.deltaTwo - 1) * ((guidePlaneProfile.t[0] / guidePlaneProfile.t[1])**deformation.deltaTwo) - 1);
+	deformation.forwardSlipZonePressureOne = (deformation.k1 / deformation.deltaOne) * ((deformation.deltaOne + 1) * ((guidePlaneProfile.t[0] / guidePlaneProfile.t[1])**deformation.deltaOne) - 1);
+	deformation.forwardSlipZonePressureTwo = (deformation.k2 / deformation.deltaTwo) * ((deformation.deltaTwo + 1) * ((guidePlaneProfile.t[1] / guidePlaneProfile.t[2])**deformation.deltaTwo) - 1);
+	deformation.p1 = 0.5 * (deformation.backwardSlipZonePressureOne + deformation.forwardSlipZonePressureOne);
+	deformation.p2 = 0.5 * (deformation.backwardSlipZonePressureTwo + deformation.forwardSlipZonePressureTwo);
 }
 
 
