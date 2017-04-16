@@ -267,7 +267,7 @@ header .title-small .home svg {
   padding-top: 20px;
 }
 .calc-form {
-  margin-left: 20px;
+  margin: 20px 10px;
 }
 .calc-form select {
   width: 200px;
@@ -287,4 +287,23 @@ header .title-small .home svg {
 }
 .calc-form .route-selection .item .text {
   min-width: 230px;
+}
+.result-table {
+  margin-top: 20px;
+}
+.result-table table tbody tr:nth-child(odd) {
+  background: #fff;
+}
+.result-table table tbody tr:nth-child(even) {
+  background: #EAF3F3;
+}
+.result-table table tbody tr td {
+  padding: 2px 5px;
+  width: 33%;
+}
+.result-table table tbody .table-head {
+  background: #167F92 !important;
+}
+.result-table table tbody .table-head td {
+  color: #fff;
 }

@@ -10,6 +10,10 @@
 @hoverColor: #F2F2FB;
 @hoverTextColor: #0065F4;
 
+@tableHeaderColor: #167F92;
+@tableColorTwo: #EAF3F3;
+@tableColorOne: #fff;
+
 @mainFont: 'Arsenal';
 // variables end
 
@@ -125,7 +129,7 @@ header{
 }
 
 .calc-form{
-	margin-left: 20px;
+	margin: 20px 10px;
 	select{
 		width: 200px;
     height: 50px;
@@ -141,6 +145,32 @@ header{
 			margin: 5px 0;
 			.text{
 				min-width: 230px;
+			}
+		}
+	}
+}
+
+.result-table{
+	margin-top: 20px;
+	table{
+		tbody{
+			tr{
+				&:nth-child(odd){
+					background: @tableColorOne;
+				}
+				&:nth-child(even){
+					background: @tableColorTwo;
+				}
+				td{
+					padding: 2px 5px;
+					width: 33%;
+				}
+			}
+			.table-head{
+				background: @tableHeaderColor !important;
+				td{
+					color: @secondaryTextColor;
+				}
 			}
 		}
 	}

@@ -63,9 +63,9 @@ function precisionLimits(route){
 
 // main objects
 
-var millOne =  new RollingMill(82, 0.5, 60, 3, 455, 1.6, 210, 69, 12, 45, 1.6, 4.55);
+// var millOne =  new RollingMill(82, 0.5, 60, 3, 455, 1.6, 210, 69, 12, 45, 1.6, 4.55);
 
-var routeOne = new Route(17.5, 16.3, 0.7, 0.35);
+// var routeOne = new Route(17.5, 16.3, 0.7, 0.35);
 
 // var materialOne = new Material(660, 720, 693, 756);
 
@@ -241,15 +241,43 @@ makeCalc.addEventListener('click', function(){
 	var activeMill = createMillObj();
 	var activeRoute = createRouteObj();
 	var result = calcGuidePlaneSize(activeMill, activeRoute);
-	console.log(result);
 
-	var resultElem = document.getElementById('resultElem');
-	resultElem.innerHTML = 'Yp is ' + result.Yp;
+	var table = document.createElement('table');
+	addObjectToTable(table, result);
+	document.body.appendChild(table);
 
 })
 
-function preCalc(){
-	var activeMill = createMillObj();
-	var activeRoute = createRouteObj();
-	return calcGuidePlaneSize(activeMill, activeRoute);
+function addObjectToTable(table, obj, tr) {
+  var rows = 0;
+  for (key in obj) {
+    if (tr == null) {
+      tr = document.createElement('tr');
+      table.appendChild(tr);
+    }  
+    
+    var td = document.createElement('td');
+    td.textContent = key;
+    tr.appendChild(td);
+
+    var value = obj[key];
+    if (typeof value != 'object') {
+      var td = document.createElement('td');
+      td.textContent = value;
+      tr.appendChild(td);
+      rows += 1;
+    }
+    else {
+      var subrows = addObjectToTable(table, value, tr);
+      td.setAttribute('rowspan',subrows);
+      rows += subrows;
+    }
+    
+    tr = null;
+  }
+  return rows;
 }
+
+// var table = document.createElement('table');
+// addObjectToTable(table,obj);
+// document.body.appendChild(table);
