@@ -252,3 +252,12 @@ header .title-small .home svg {
 .result-table table tbody .table-head td {
   color: #fff;
 }
+table {
+  margin: 5px;
+  border: 2px solid #000;
+  padding: 5px;
+}
+table tr {
+  margin: 5px 0;
+  border: 1px solid #000;
+}

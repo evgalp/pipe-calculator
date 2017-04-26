@@ -1,15 +1,8 @@
-var rollSize = {};
-// var guidePlane = {};
-var guidePlaneProfile = {};
-var deformation = {};
 
-// var activeMill = {};
-var activeRoute = {};
-var activeMaterial = {};
 
 //constructors
 
-function RollingMill(baseRollDiameter, sigmaHalf, alpha, n, carriageStrokeLength, diametersMaxRelation, L, carriageStrokeLengthRotational, reductionSectionLength, trunnionDiameter, DkDcMax, m){
+function RollingMill(baseRollDiameter, sigmaHalf, alpha, n, carriageStrokeLength, L, carriageStrokeLengthRotational, reductionSectionLength, trunnionDiameter, DkDcMax, m){
 
 	this.baseRollDiameter = baseRollDiameter;
 	this.sigmaHalf = sigmaHalf;
@@ -17,7 +10,6 @@ function RollingMill(baseRollDiameter, sigmaHalf, alpha, n, carriageStrokeLength
 	this.alpha = toRadians(alpha);
 	this.n = n;
 	this.carriageStrokeLength = carriageStrokeLength;
-	this.diametersMaxRelation = diametersMaxRelation;
 	this.L = L;
 	this.carriageStrokeLengthRotational = carriageStrokeLengthRotational;
 	this.reductionSectionLength = reductionSectionLength;
@@ -47,6 +39,10 @@ function Material(sigmaB1, sigmaB2){
 
 // other service functions
 
+String.prototype.float = function() { 
+  return parseFloat(this.replace(',', '.')); 
+}
+
 function toRadians (angle) {
   return angle * (Math.PI / 180);
 }
@@ -61,6 +57,36 @@ function precisionLimits(route){
 	return sigmaT;
 }
 
+function addObjectToTable(table, obj, tr) {
+  var rows = 0;
+  for (key in obj) {
+    if (tr == null) {
+      tr = document.createElement('tr');
+      table.appendChild(tr);
+    }  
+    
+    var td = document.createElement('td');
+    td.textContent = key;
+    tr.appendChild(td);
+
+    var value = obj[key];
+    if (typeof value != 'object') {
+      var td = document.createElement('td');
+      td.textContent = value;
+      tr.appendChild(td);
+      rows += 1;
+    }
+    else {
+      var subrows = addObjectToTable(table, value, tr);
+      td.setAttribute('rowspan',subrows);
+      rows += subrows;
+    }
+    
+    tr = null;
+  }
+  return rows;
+}
+
 // main objects
 
 // var millOne =  new RollingMill(82, 0.5, 60, 3, 455, 1.6, 210, 69, 12, 45, 1.6, 4.55);
@@ -72,6 +98,8 @@ function precisionLimits(route){
 // functions
 
 function calcRollSize(mill, route){
+
+	rollSize = {};
 
 	rollSize.rebordDiameter = (mill.baseRollDiameter - mill.sigmaHalf) * Math.sin(mill.alpha);
 
@@ -85,11 +113,7 @@ function calcRollSize(mill, route){
 
 	rollSize.beta = toRadians(15);
 
-	rollSize.delta = (guidePlaneProfile.tp - guidePlaneProfile.t[0]) / Math.sin(rollSize.alpha);
-
-	rollSize.gamma = Math.asin(rollSize.delta / route.billetDiameterFinal);
-
-	rollSize.reductionRadius = (route.billetDiameterFinal / 2) * (1 + ( (4 * (Math.cos(rollSize.alpha + rollSize.gamma))**2 - 1 ) / (2 - 2 * Math.cos(rollSize.beta) * Math.cos(rollSize.alpha + rollSize.gamma)) ));
+	return rollSize;
 
 }
 
@@ -129,8 +153,13 @@ function calcGuidePlaneSize(mill, route){
 }
 
 function calcGuidePlaneProfile(mill, route){
+
+	var guidePlane = calcGuidePlaneSize(mill, route);
+
+	var guidePlaneProfile = {};
+
 	guidePlaneProfile.oneSectionLength = guidePlane.wallReductionSection / 7;
-	guidePlaneProfile.tp = precisionLimits(route) + route.billetWallThicknessInitial;
+	guidePlaneProfile.tp = parseFloat(precisionLimits(route)) + parseFloat(route.billetWallThicknessInitial);
 	guidePlaneProfile.ut = guidePlaneProfile.tp / route.billetWallThicknessFinal;
 
 	var u = [];
@@ -163,11 +192,24 @@ function calcGuidePlaneProfile(mill, route){
 		return ( (y * mill.L) / (0.5 * guidePlane.lb + guidePlane.calibratingSection + guidePlane.horizontalSection + (7 - n[idx]) * guidePlaneProfile.oneSectionLength) );
 	});
 
+	rollSize.delta = (guidePlaneProfile.tp - guidePlaneProfile.t[0]) / Math.sin(rollSize.alpha);
+
+	rollSize.gamma = Math.asin(rollSize.delta / route.billetDiameterFinal);
+
+	rollSize.reductionRadius = (route.billetDiameterFinal / 2) * (1 + ( (4 * (Math.cos(rollSize.alpha + rollSize.gamma))**2 - 1 ) / (2 - 2 * Math.cos(rollSize.beta) * Math.cos(rollSize.alpha + rollSize.gamma)) ));
+
+	return guidePlaneProfile;
+
 	// rob - in rollSize
 
 }
 
 function calcDeformation(mill, route, material){
+
+	var guidePlaneProfile = calcGuidePlaneProfile(mill, route);
+
+	var deformation = {};
+
 	deformation.wallReductionOne = guidePlaneProfile.tp - guidePlaneProfile.t[0];
 	deformation.wallReductionTwo = guidePlaneProfile.t[0] - guidePlaneProfile.t[1];
 	deformation.rogr = rollSize.bottomRollDiameter / 2;
@@ -186,6 +228,8 @@ function calcDeformation(mill, route, material){
 	deformation.forwardSlipZonePressureTwo = (deformation.k2 / deformation.deltaTwo) * ((deformation.deltaTwo + 1) * ((guidePlaneProfile.t[1] / guidePlaneProfile.t[2])**deformation.deltaTwo) - 1);
 	deformation.p1 = 0.5 * (deformation.backwardSlipZonePressureOne + deformation.forwardSlipZonePressureOne);
 	deformation.p2 = 0.5 * (deformation.backwardSlipZonePressureTwo + deformation.forwardSlipZonePressureTwo);
+
+	return deformation;
 }
 
 
@@ -209,74 +253,83 @@ function calcDeformation(mill, route, material){
 
 // DOM interactions
 
-function getSelectedMill(){
+
+
+function createMillObj(e){
+
 	var e = document.getElementById("millSelect");
 	var selctedMill = e.options[e.selectedIndex].value;
-	return selctedMill;
-}
 
-function createMillObj(){
-	if(getSelectedMill() == 'mill_15_30'){
-		var activeMill = new RollingMill(82, 0.5, 60, 3, 455, 1.6, 210, 69, 12, 45, 1.6, 4.55);
+	if(selctedMill == 'mill_8_15'){
+		var activeMill = new RollingMill(53.15, 0.5, 60, 3, 450, 150, 69, 12, 28.5, 1.4, 4.55);
+	}
+	if(selctedMill == 'mill_15_30'){
+		var activeMill = new RollingMill(82, 0.5, 60, 3, 455, 210, 69, 12, 45, 1.6, 4.55);
 	}
 	return activeMill;
 }
 
-function createRouteObj(){
-	var billetDiameterInitial = document.getElementById("billetDiameterInitial").value;
-	var billetDiameterFinal = document.getElementById("billetDiameterFinal").value;
-	var billetWallThicknessInitial = document.getElementById("billetWallThicknessInitial").value;
+function createMaterialObj(e){
 
-	var billetWallThicknessFinal = document.getElementById("billetWallThicknessFinal").value;
+	var e = document.getElementById("materialSelect");
+	var selctedMaterial = e.options[e.selectedIndex].value;
+
+	if(selctedMaterial == 'steel_20A'){
+		var activeMaterial = new Material(660, 720);
+	}
+	return activeMaterial;
+}
+
+function createRouteObj(){
+	var billetDiameterInitial = (document.getElementById("billetDiameterInitial").value).float();
+	var billetDiameterFinal = (document.getElementById("billetDiameterFinal").value).float();
+	var billetWallThicknessInitial = (document.getElementById("billetWallThicknessInitial").value).float();
+
+	var billetWallThicknessFinal = (document.getElementById("billetWallThicknessFinal").value).float();
 
 	var activeRoute = new Route (billetDiameterInitial, billetDiameterFinal, billetWallThicknessInitial, billetWallThicknessFinal);
 
 	return activeRoute;
 }
 
-const makeCalc = document.getElementById("makeCalc");
+
+(function mainCalc(){
+	var makeCalc = document.getElementById("makeCalc");
+
+	makeCalc.addEventListener('click', function(){
+		var activeMill = createMillObj();
+		var activeRoute = createRouteObj();
+		var activeMaterial = createMaterialObj();
 
 
-makeCalc.addEventListener('click', function(){
-	var activeMill = createMillObj();
-	var activeRoute = createRouteObj();
-	var result = calcGuidePlaneSize(activeMill, activeRoute);
+		var rollSize = calcRollSize(activeMill, activeRoute);
+		var guidePlane = calcGuidePlaneSize(activeMill, activeRoute);
+		var guidePlaneProfile = calcGuidePlaneProfile(activeMill, activeRoute);
+		var deformation = calcDeformation(activeMill, activeRoute, activeMaterial);
 
-	var table = document.createElement('table');
-	addObjectToTable(table, result);
-	document.body.appendChild(table);
 
-})
+		(function fillTables(){
+			var rollSizeTable = document.createElement('table');
+			addObjectToTable(rollSizeTable, rollSize);
+			document.body.appendChild(rollSizeTable);
 
-function addObjectToTable(table, obj, tr) {
-  var rows = 0;
-  for (key in obj) {
-    if (tr == null) {
-      tr = document.createElement('tr');
-      table.appendChild(tr);
-    }  
-    
-    var td = document.createElement('td');
-    td.textContent = key;
-    tr.appendChild(td);
+			var guidePlaneTable = document.createElement('table');
+			addObjectToTable(guidePlaneTable, guidePlane);
+			document.body.appendChild(guidePlaneTable);
 
-    var value = obj[key];
-    if (typeof value != 'object') {
-      var td = document.createElement('td');
-      td.textContent = value;
-      tr.appendChild(td);
-      rows += 1;
-    }
-    else {
-      var subrows = addObjectToTable(table, value, tr);
-      td.setAttribute('rowspan',subrows);
-      rows += subrows;
-    }
-    
-    tr = null;
-  }
-  return rows;
-}
+			var guidePlaneProfileTable = document.createElement('table');
+			addObjectToTable(guidePlaneProfileTable, guidePlaneProfile);
+			document.body.appendChild(guidePlaneProfileTable);
+
+			var deformationTable = document.createElement('table');
+			addObjectToTable(deformationTable, deformation);
+			document.body.appendChild(deformationTable);
+		})();
+
+	})
+})();
+
+
 
 // var table = document.createElement('table');
 // addObjectToTable(table,obj);
