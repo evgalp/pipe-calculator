@@ -17,7 +17,7 @@
 
 	<header>
 		<div class="title-small">
-			<span>Виробництво труб на станах ХПТР</span>
+			<span>Виробництво труб на станах ХПТР: Розрахунок калібровки інструменту</span>
 			<a class="home" href="index.html">
 				<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 					viewBox="0 0 512.001 512.001" style="enable-background:new 0 0 512.001 512.001;" xml:space="preserve">
@@ -41,14 +41,24 @@
 		</div>	
 	</header>
 
-	<div class="calc-form">
+	<div class="wrapper">
+		<div class="calc-form">
 
-		<div class="mill-selection">
-			<span>Оберіть тип стану ХПТР</span>
-			<select name="millSelect" id="millSelect">
-				<option value="mill_8_15">ХПТР 8-15</option>
-				<option value="mill_15_30">ХПТР 15-30</option>
-			</select>
+		<div class="dropdowns">
+			<div class="mill-selection">
+				<span>Оберіть тип стану ХПТР</span>
+				<select name="millSelect" id="millSelect">
+					<option value="mill_8_15">ХПТР 8-15</option>
+					<option value="mill_15_30">ХПТР 15-30</option>
+				</select>
+			</div>
+
+			<div class="material">
+				<span class="text">Оберіть матеріал</span>
+				<select name="materialSelect" id="materialSelect">
+					<option value="steel_20A">Сталь 20А</option>
+				</select>
+			</div>
 		</div>
 
 		<div class="route-selection">
@@ -71,18 +81,13 @@
 			</div>
 		</div>
 
-		<div class="material">
-			<span class="text">Оберіть матеріал</span>
-			<select name="materialSelect" id="materialSelect">
-				<option value="steel_20A">Сталь 20А</option>
-			</select>
-		</div>
+		
 
 		<div class="calculate">
-			<button id="makeCalc">Підрахуй !</button>
+			<button id="makeCalc" class="btn">Виконати розрахунок</button>
 		</div>
 
-		<div class="result-table">
+		<!-- <div class="result-table">
 			<table>
 				<tbody id="result-table">
 					<tr class="table-head">
@@ -92,9 +97,12 @@
 					</tr>
 				</tbody>
 			</table>
-		</div>
+		</div> -->
 
 	</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 
 	<script type="text/javascript" src="js/main.js"></script>
 	

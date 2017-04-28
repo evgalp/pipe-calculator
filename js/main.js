@@ -57,7 +57,9 @@ function precisionLimits(route){
 	return sigmaT;
 }
 
+// ** table fill with obj key-value pairs
 function addObjectToTable(table, obj, tr) {
+
   var rows = 0;
   for (key in obj) {
     if (tr == null) {
@@ -85,6 +87,50 @@ function addObjectToTable(table, obj, tr) {
     tr = null;
   }
   return rows;
+}
+
+// ** table fill with arrays
+
+function createTable(tableData, tableId) {
+  var table = document.createElement('table');
+  table.id = tableId;
+  var tableBody = document.createElement('tbody');
+
+  tableData.forEach(function(rowData) {
+    var row = document.createElement('tr');
+
+    rowData.forEach(function(cellData) {
+      var cell = document.createElement('td');
+      cell.appendChild(document.createTextNode(cellData));
+      row.appendChild(cell);
+    });
+
+    tableBody.appendChild(row);
+  });
+
+  table.appendChild(tableBody);
+
+  document.body.appendChild(table);
+}
+
+function transpose(tableId){
+  $(tableId).each(function() {
+    var $this = $(this);
+    var newrows = [];
+    $this.find("tr").each(function(){
+      var i = 0;
+      $(this).find("td").each(function(){
+          i++;
+          if(newrows[i] === undefined) { newrows[i] = $("<tr></tr>"); }
+          newrows[i].append($(this));
+      });
+    });
+    $this.find("tr").remove();
+    $.each(newrows, function(){
+        $this.append(this);
+    });
+  })
+  return false;
 }
 
 // main objects
@@ -308,26 +354,47 @@ function createRouteObj(){
 		var deformation = calcDeformation(activeMill, activeRoute, activeMaterial);
 
 
-		(function fillTables(){
-			var rollSizeTable = document.createElement('table');
-			addObjectToTable(rollSizeTable, rollSize);
-			document.body.appendChild(rollSizeTable);
+		// (function fillTables(){
+		// 	var rollSizeTable = document.createElement('table');
+		// 	addObjectToTable(rollSizeTable, rollSize);
+		// 	document.body.appendChild(rollSizeTable);
 
-			var guidePlaneTable = document.createElement('table');
-			addObjectToTable(guidePlaneTable, guidePlane);
-			document.body.appendChild(guidePlaneTable);
+		// 	var guidePlaneTable = document.createElement('table');
+		// 	addObjectToTable(guidePlaneTable, guidePlane);
+		// 	document.body.appendChild(guidePlaneTable);
 
-			var guidePlaneProfileTable = document.createElement('table');
-			addObjectToTable(guidePlaneProfileTable, guidePlaneProfile);
-			document.body.appendChild(guidePlaneProfileTable);
+		// 	var guidePlaneProfileTable = document.createElement('table');
+		// 	addObjectToTable(guidePlaneProfileTable, guidePlaneProfile);
+		// 	document.body.appendChild(guidePlaneProfileTable);
 
-			var deformationTable = document.createElement('table');
-			addObjectToTable(deformationTable, deformation);
-			document.body.appendChild(deformationTable);
+		// 	var deformationTable = document.createElement('table');
+		// 	addObjectToTable(deformationTable, deformation);
+		// 	document.body.appendChild(deformationTable);
+		// })();
+
+		(function fillRollSizeTable(){
+			var names = ["Діаметр реборд", "Діаметр дна ролика", "Мінімальна товщина реборд", "Діаметр, що катає", "\u03B1", "\u03B2", "\u03B4", "\u03B3", "радіус"];
+			var values = Object.values(rollSize);
+			var suffixes = ["мм", "мм", "мм", "мм", "--", "--", "--", "--", "мм"];
+
+			createTable([names, values, suffixes], "myRollSizeTable");
+			transpose('#myRollSizeTable');
+		})();
+
+		(function fillGuidePlaneTable(){
+			var names = ["Робоча довжина", "Сумарна довжина ділянок виходу роликів із зіткнення з металом", "Ділянка подачі і повороту", "Зниження профілю планки в кінці ділянки подачі", "Зниження профілю планки в кінці ділянки редукції", "Ухил", "Ухил в межах норми", "Сумарна витяжка за прохід", "Горизонтальна ділянка", "Калібрувальна ділянка", "Ділянка редукції стінки"];
+			var values = Object.values(guidePlane);
+			var suffixes = ["мм", "мм", "мм", "мм", "мм", "мм", "мм", "мм", "мм", "мм", "мм"];
+
+			createTable([names, values, suffixes], "myGuidePlaneTable");
+			transpose('#myGuidePlaneTable');
 		})();
 
 	})
 })();
+
+
+
 
 
 

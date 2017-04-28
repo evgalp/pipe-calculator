@@ -14,12 +14,14 @@
 @tableColorTwo: #EAF3F3;
 @tableColorOne: #fff;
 
-@mainFont: 'Arsenal';
+// @mainFont: 'Arsenal';
+// @main-font: 'sans-serif';
 // variables end
 
 body *{
 	color: @primaryTextColor;
-	font-family: @mainFont;
+	// font-family: @mainFont;
+	font-family: sans-serif;
 }
 
 body{
@@ -130,58 +132,99 @@ header{
 
 .calc-form{
 	margin: 20px 10px;
-	select{
-		width: 200px;
-    height: 50px;
-    margin: 20px 0;
-    display: block;
-    font-weight: 700;
-    font-size: 25px;
+	border: 1px solid @primaryColor;
+	border-radius: 15px;
+	padding: 15px 0;
+	>*{
+		max-width: 550px;
+		margin: 25px auto;
+	}
+	.dropdowns{
+		display: flex;
+		justify-content: space-between;
+		font-size: 20px;
 	}
 	.route-selection{
+		font-size: 20px;
 		.item{
-			max-width: 500px;
 			display: flex;
+			justify-content: space-between;
 			margin: 5px 0;
 			.text{
-				min-width: 230px;
+				vertical-align: middle;
+			}
+			input{
+				vertical-align: middle;
 			}
 		}
 	}
-}
-
-.result-table{
-	margin-top: 20px;
-	table{
-		tbody{
-			tr{
-				&:nth-child(odd){
-					background: @tableColorOne;
-				}
-				&:nth-child(even){
-					background: @tableColorTwo;
-				}
-				td{
-					padding: 2px 5px;
-					width: 33%;
-				}
-			}
-			.table-head{
-				background: @tableHeaderColor !important;
-				td{
-					color: @secondaryTextColor;
-				}
-			}
-		}
+	.calculate{
+		text-align: center;
 	}
 }
 
 table{
-	margin: 5px;
-	border: 2px solid #000;
-	padding: 5px;
-	tr{
-		margin: 5px 0;
-		border: 1px solid #000;
+	margin: 40px auto;
+	max-width: 80%;
+	border: 1px solid @primaryColor;
+	// border-radius: 15px; 
+	tbody{
+		tr{
+			&:nth-child(odd){
+				background: @tableColorOne;
+			}
+			&:nth-child(even){
+				background: @tableColorTwo;
+			}
+			td{
+				overflow: hidden;
+				padding: 2px 5px;
+				width: 33%;
+			}
+		}
+		.table-head{
+			background: @tableHeaderColor !important;
+			td{
+				color: @secondaryTextColor;
+			}
+		}
 	}
 }
+
+
+
+.btn{
+	width: auto;
+	height: 50px;
+	border: 0;
+	border-radius: 5px;
+	box-shadow: 0;
+	outline: 0;
+	background: @primaryColor;
+	color: @secondaryTextColor;
+	font-size: 20px;
+	padding: 10px 15px;
+	&:hover{
+		cursor: pointer;
+		opacity: .8;
+	}
+}
+
+input{
+	height: 20px;
+	font-size: 18px;
+	padding: 5px 10px;
+}
+
+select{
+	height: 20px;
+	font-weight: 400;
+	display: block;
+	width: 200px;
+  height: 50px;
+  margin: 10px 0;
+  font-size: 25px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+

@@ -118,7 +118,7 @@ select {
 }
 body * {
   color: #006591;
-  font-family: 'Arsenal';
+  font-family: sans-serif;
 }
 body a {
   display: block;
@@ -216,48 +216,87 @@ header .title-small .home svg {
 }
 .calc-form {
   margin: 20px 10px;
+  border: 1px solid #006591;
+  border-radius: 15px;
+  padding: 15px 0;
 }
-.calc-form select {
-  width: 200px;
-  height: 50px;
-  margin: 20px 0;
-  display: block;
-  font-weight: 700;
-  font-size: 25px;
+.calc-form > * {
+  max-width: 550px;
+  margin: 25px auto;
+}
+.calc-form .dropdowns {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+}
+.calc-form .route-selection {
+  font-size: 20px;
 }
 .calc-form .route-selection .item {
-  max-width: 500px;
   display: flex;
+  justify-content: space-between;
   margin: 5px 0;
 }
 .calc-form .route-selection .item .text {
-  min-width: 230px;
+  vertical-align: middle;
 }
-.result-table {
-  margin-top: 20px;
+.calc-form .route-selection .item input {
+  vertical-align: middle;
 }
-.result-table table tbody tr:nth-child(odd) {
+.calc-form .calculate {
+  text-align: center;
+}
+table {
+  margin: 40px auto;
+  max-width: 80%;
+  border: 1px solid #006591;
+}
+table tbody tr:nth-child(odd) {
   background: #fff;
 }
-.result-table table tbody tr:nth-child(even) {
+table tbody tr:nth-child(even) {
   background: #EAF3F3;
 }
-.result-table table tbody tr td {
+table tbody tr td {
+  overflow: hidden;
   padding: 2px 5px;
   width: 33%;
 }
-.result-table table tbody .table-head {
+table tbody .table-head {
   background: #167F92 !important;
 }
-.result-table table tbody .table-head td {
+table tbody .table-head td {
   color: #fff;
 }
-table {
-  margin: 5px;
-  border: 2px solid #000;
-  padding: 5px;
+.btn {
+  width: auto;
+  height: 50px;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0;
+  outline: 0;
+  background: #006591;
+  color: #fff;
+  font-size: 20px;
+  padding: 10px 15px;
 }
-table tr {
-  margin: 5px 0;
-  border: 1px solid #000;
+.btn:hover {
+  cursor: pointer;
+  opacity: .8;
+}
+input {
+  height: 20px;
+  font-size: 18px;
+  padding: 5px 10px;
+}
+select {
+  height: 20px;
+  font-weight: 400;
+  display: block;
+  width: 200px;
+  height: 50px;
+  margin: 10px 0;
+  font-size: 25px;
+  padding: 0 10px;
+  cursor: pointer;
 }
