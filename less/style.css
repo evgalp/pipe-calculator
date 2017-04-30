@@ -221,7 +221,7 @@ header .title-small .home svg {
   padding: 15px 0;
 }
 .calc-form > * {
-  max-width: 550px;
+  max-width: 600px;
   margin: 25px auto;
 }
 .calc-form .dropdowns {
@@ -247,9 +247,23 @@ header .title-small .home svg {
   text-align: center;
 }
 table {
-  margin: 40px auto;
+  margin: 60px auto;
   max-width: 80%;
   border: 1px solid #006591;
+  position: relative;
+}
+table:before {
+  content: '';
+  background: #006591;
+  display: block;
+  color: #fff;
+  position: absolute;
+  top: -35px;
+  left: -1px;
+  padding: 5px 5px 5px 5px;
+  width: 100%;
+  padding: 5px 0px 5px 5px;
+  width: 99.8%;
 }
 table tbody tr:nth-child(odd) {
   background: #fff;
@@ -259,14 +273,26 @@ table tbody tr:nth-child(even) {
 }
 table tbody tr td {
   overflow: hidden;
-  padding: 2px 5px;
-  width: 33%;
+  padding: 2px 10px;
+  border-right: 1px solid #006591;
+}
+table tbody tr td:nth-child(2) {
+  text-align: right;
+}
+table tbody tr td:last-child {
+  border-right: 0;
 }
 table tbody .table-head {
   background: #167F92 !important;
 }
 table tbody .table-head td {
   color: #fff;
+}
+#domRollSizeTable:before {
+  content: 'Параметри роликів';
+}
+#domGuidePlaneTable:before {
+  content: 'Параметри опорних планок';
 }
 .btn {
   width: auto;

@@ -90,16 +90,53 @@ function addObjectToTable(table, obj, tr) {
 }
 
 // ** table fill with arrays
+function addObjectToTableArr(table, arr, tr) {
+
+  var rows = 0;
+  for (key in arr) {
+    if (tr == null) {
+      tr = document.createElement('tr');
+      table.appendChild(tr);
+    }  
+    
+    var td = document.createElement('td');
+    td.textContent = key;
+    tr.appendChild(td);
+
+    var value = arr[key];
+    if (typeof value != 'object') {
+      var td = document.createElement('td');
+      td.textContent = value;
+      tr.appendChild(td);
+      rows += 1;
+    }
+    else {
+      var subrows = addObjectToTable(table, value, tr);
+      td.setAttribute('rowspan',subrows);
+      rows += subrows;
+    }
+    
+    tr = null;
+  }
+  return rows;
+}
+
+// ** table fill with arrays
 
 function createTable(tableData, tableId) {
+
   var table = document.createElement('table');
   table.id = tableId;
   var tableBody = document.createElement('tbody');
 
   tableData.forEach(function(rowData) {
+
     var row = document.createElement('tr');
 
     rowData.forEach(function(cellData) {
+
+
+
       var cell = document.createElement('td');
       cell.appendChild(document.createTextNode(cellData));
       row.appendChild(cell);
@@ -131,6 +168,15 @@ function transpose(tableId){
     });
   })
   return false;
+}
+
+function clearTables(){
+	if($("#domRollSizeTable").length){
+		$("#domRollSizeTable").remove();
+	}
+	if($("#domGuidePlaneTable").length){
+		$("#domGuidePlaneTable").remove();
+	}
 }
 
 // main objects
@@ -354,42 +400,60 @@ function createRouteObj(){
 		var deformation = calcDeformation(activeMill, activeRoute, activeMaterial);
 
 
-		// (function fillTables(){
-		// 	var rollSizeTable = document.createElement('table');
-		// 	addObjectToTable(rollSizeTable, rollSize);
-		// 	document.body.appendChild(rollSizeTable);
+		(function fillTables(){
+			// var rollSizeTable = document.createElement('table');
+			// addObjectToTable(rollSizeTable, rollSize);
+			// document.body.appendChild(rollSizeTable);
 
-		// 	var guidePlaneTable = document.createElement('table');
-		// 	addObjectToTable(guidePlaneTable, guidePlane);
-		// 	document.body.appendChild(guidePlaneTable);
+			// var guidePlaneTable = document.createElement('table');
+			// addObjectToTable(guidePlaneTable, guidePlane);
+			// document.body.appendChild(guidePlaneTable);
+			// 	var names = ["Діаметр реборд", "Діаметр дна ролика", "Мінімальна товщина реборд", "Діаметр, що катає", "\u03B1", "\u03B2", "\u03B4", "\u03B3", "радіус"];
 
-		// 	var guidePlaneProfileTable = document.createElement('table');
-		// 	addObjectToTable(guidePlaneProfileTable, guidePlaneProfile);
-		// 	document.body.appendChild(guidePlaneProfileTable);
+			// var guidePlaneProfileTable = document.createElement('table');
+			// addObjectToTableArr(guidePlaneProfileTable, [guidePlaneProfile, names]);
+			// document.body.appendChild(guidePlaneProfileTable);
 
-		// 	var deformationTable = document.createElement('table');
-		// 	addObjectToTable(deformationTable, deformation);
-		// 	document.body.appendChild(deformationTable);
-		// })();
+			// var deformationTable = document.createElement('table');
+			// addObjectToTable(deformationTable, deformation);
+			// document.body.appendChild(deformationTable);
+		})();
+
+		clearTables();
 
 		(function fillRollSizeTable(){
 			var names = ["Діаметр реборд", "Діаметр дна ролика", "Мінімальна товщина реборд", "Діаметр, що катає", "\u03B1", "\u03B2", "\u03B4", "\u03B3", "радіус"];
 			var values = Object.values(rollSize);
 			var suffixes = ["мм", "мм", "мм", "мм", "--", "--", "--", "--", "мм"];
 
-			createTable([names, values, suffixes], "myRollSizeTable");
-			transpose('#myRollSizeTable');
+			createTable([names, values, suffixes], "domRollSizeTable");
+			transpose('#domRollSizeTable');
 		})();
 
 		(function fillGuidePlaneTable(){
 			var names = ["Робоча довжина", "Сумарна довжина ділянок виходу роликів із зіткнення з металом", "Ділянка подачі і повороту", "Зниження профілю планки в кінці ділянки подачі", "Зниження профілю планки в кінці ділянки редукції", "Ухил", "Ухил в межах норми", "Сумарна витяжка за прохід", "Горизонтальна ділянка", "Калібрувальна ділянка", "Ділянка редукції стінки"];
 			var values = Object.values(guidePlane);
-			var suffixes = ["мм", "мм", "мм", "мм", "мм", "мм", "мм", "мм", "мм", "мм", "мм"];
+			var suffixes = ["мм", "мм", "мм", "мм", "мм", "--", "--", "мм", "мм", "мм", "мм"];
 
-			createTable([names, values, suffixes], "myGuidePlaneTable");
-			transpose('#myGuidePlaneTable');
+			createTable([names, values, suffixes], "domGuidePlaneTable");
+			transpose('#domGuidePlaneTable');
 		})();
 
+		// (function fillGuidePlaneProfileTable(){
+		// 	var names = ["Довжина однієї ділянки", "Товщина стінки на початку ділянки", "Коефіціент обтиснення стінки", "u", "t",]
+		// 	createTable([Object.values(guidePlaneProfile)], "myGuidePlaneProfileTable");
+		// 	transpose("#myGuidePlaneProfileTable");
+
+		// })();
+
+	})
+})();
+
+(function clearByBtn(){
+	var clearCalc = document.getElementById("clearCalc");
+
+	clearCalc.addEventListener('click', function(){
+		clearTables();
 	})
 })();
 
