@@ -177,6 +177,12 @@ function clearTables(){
 	if($("#domGuidePlaneTable").length){
 		$("#domGuidePlaneTable").remove();
 	}
+	if($("#domGuidePlaneProfileTable").length){
+		$("#domGuidePlaneProfileTable").remove();
+	}
+	if($("#domDeformationTable").length){
+		$("#domDeformationTable").remove();
+	}
 }
 
 // main objects
@@ -399,26 +405,6 @@ function createRouteObj(){
 		var guidePlaneProfile = calcGuidePlaneProfile(activeMill, activeRoute);
 		var deformation = calcDeformation(activeMill, activeRoute, activeMaterial);
 
-
-		(function fillTables(){
-			// var rollSizeTable = document.createElement('table');
-			// addObjectToTable(rollSizeTable, rollSize);
-			// document.body.appendChild(rollSizeTable);
-
-			// var guidePlaneTable = document.createElement('table');
-			// addObjectToTable(guidePlaneTable, guidePlane);
-			// document.body.appendChild(guidePlaneTable);
-			// 	var names = ["Діаметр реборд", "Діаметр дна ролика", "Мінімальна товщина реборд", "Діаметр, що катає", "\u03B1", "\u03B2", "\u03B4", "\u03B3", "радіус"];
-
-			// var guidePlaneProfileTable = document.createElement('table');
-			// addObjectToTableArr(guidePlaneProfileTable, [guidePlaneProfile, names]);
-			// document.body.appendChild(guidePlaneProfileTable);
-
-			// var deformationTable = document.createElement('table');
-			// addObjectToTable(deformationTable, deformation);
-			// document.body.appendChild(deformationTable);
-		})();
-
 		clearTables();
 
 		(function fillRollSizeTable(){
@@ -439,12 +425,21 @@ function createRouteObj(){
 			transpose('#domGuidePlaneTable');
 		})();
 
-		// (function fillGuidePlaneProfileTable(){
-		// 	var names = ["Довжина однієї ділянки", "Товщина стінки на початку ділянки", "Коефіціент обтиснення стінки", "u", "t",]
-		// 	createTable([Object.values(guidePlaneProfile)], "myGuidePlaneProfileTable");
-		// 	transpose("#myGuidePlaneProfileTable");
+		(function fillTables(){
+			var domGuidePlaneProfileTable = document.createElement('table');
+			domGuidePlaneProfileTable.id = "domGuidePlaneProfileTable";
+			addObjectToTableArr(domGuidePlaneProfileTable, guidePlaneProfile);
+			document.body.appendChild(domGuidePlaneProfileTable);
+		})();
 
-		// })();
+		(function fillDeformationTable(){
+			var names = ["Обтиснення стінки на ділянці 0-1", "Обтиснення стінки на ділянці 1-2", "\u03C1 гр", "\u03B4 1", "\u03B4 2", "Коефініент сумарної витяжки в перетині 1", "Коефініент сумарної витяжки в перетині 2", "Ступінь деформації в перетині 1", "Ступінь деформації в перетині 2", "Опір деформації в перетині 1", "Опір деформації в перетині 2", "Контактний тиск 1 для зони випередження", "Контактний тиск 2 для зони випередження", "Контактний тиск 1 для зони відставання", "Контактний тиск 2 для зони відставання", "Середній контактний тиск 1 в перетині двузонного осередку деформації", "Середній контактний тиск 2 в перетині двузонного осередку деформації"];
+			var values = Object.values(deformation);
+			var suffixes = ["мм", "мм","мм", "--", "--", "--", "--", "%", "%", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа"];
+
+			createTable([names, values, suffixes], "domDeformationTable");
+			transpose('#domDeformationTable');
+		})();
 
 	})
 })();

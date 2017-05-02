@@ -184,32 +184,30 @@ table{
     // width: calc(100% - 3px);
     width: 99.8%;
 	} 
-	tbody{
-		tr{
-			&:nth-child(odd){
-				background: @tableColorOne;
+	tr{
+		&:nth-child(odd){
+			background: @tableColorOne;
+		}
+		&:nth-child(even){
+			background: @tableColorTwo;
+		}
+		td{
+			overflow: hidden;
+			padding: 2px 10px;
+			// width: 33%;
+			border-right: 1px solid @primaryColor;
+			&:nth-child(2){
+				text-align: right;
 			}
-			&:nth-child(even){
-				background: @tableColorTwo;
-			}
-			td{
-				overflow: hidden;
-				padding: 2px 10px;
-				// width: 33%;
-				border-right: 1px solid @primaryColor;
-				&:nth-child(2){
-					text-align: right;
-				}
-				&:last-child{
-					border-right: 0;
-				}
+			&:last-child{
+				border-right: 0;
 			}
 		}
-		.table-head{
-			background: @tableHeaderColor !important;
-			td{
-				color: @secondaryTextColor;
-			}
+	}
+	.table-head{
+		background: @tableHeaderColor !important;
+		td{
+			color: @secondaryTextColor;
 		}
 	}
 }
@@ -223,6 +221,33 @@ table{
 #domGuidePlaneTable{
 	&:before{
 		content: 'Параметри опорних планок'
+	}
+}
+
+#domGuidePlaneProfileTable{
+	border: none;
+	// border-right: 1px solid @primaryColor;
+	border-left: 1px solid @primaryColor;
+	border-bottom: 1px solid @primaryColor;
+
+	&:before{
+		content: 'Параметри профілю опорних планок'
+	}
+	tr{
+		td{
+			text-align: left;
+
+			border: none;
+			box-shadow: inset 0px 1px 0px 0px @primaryColor;
+    	border-right: 1px solid @primaryColor;
+
+		}
+	}
+}
+
+#domDeformationTable{
+	&:before{
+		content: 'Параметри деформації'
 	}
 }
 
