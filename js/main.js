@@ -278,11 +278,11 @@ function calcGuidePlaneProfile(mill, route){
 		return guidePlaneProfile.tp / u;
 	});
 
+	guidePlaneProfile.yp = guidePlaneProfile.tp - route.billetWallThicknessFinal;
+
 	guidePlaneProfile.yi = guidePlaneProfile.t.map(function(t){
 		return t - route.billetWallThicknessFinal;
 	});
-
-	guidePlaneProfile.yp = guidePlaneProfile.tp - route.billetWallThicknessFinal;
 
 	guidePlaneProfile.bp = (guidePlaneProfile.yp * mill.L) / (0.5 * guidePlane.lb + guidePlane.calibratingSection + guidePlane.horizontalSection + (7 - 0) * guidePlaneProfile.oneSectionLength);
 
@@ -331,25 +331,6 @@ function calcDeformation(mill, route, material){
 
 	return deformation;
 }
-
-
-
-// calcGuidePlaneSize(millOne, routeOne);
-// calcGuidePlaneProfile(millOne, routeOne);
-// calcRollSize(millOne, routeOne);
-// calcDeformation(millOne, routeOne, materialOne);
-
-// console.log(millOne);
-// console.log(rollSize);
-// console.log(guidePlane);
-// console.log(guidePlaneProfile);
-// console.log(deformation);
-
-// console.table([millOne]);
-// console.table([rollSize]);
-// console.table([guidePlane]);
-// console.table([guidePlaneProfile]);
-
 
 // DOM interactions
 
@@ -417,7 +398,6 @@ function createRouteObj(){
 			var suffixes = ["мм", "мм", "мм", "мм", "--", "--", "--", "--", "мм"];
 
 			createTable([names, values, suffixes], "domRollSizeTable");
-			// transpose('#domRollSizeTable');
 		})();
 
 		(function fillGuidePlaneTable(){
@@ -426,7 +406,6 @@ function createRouteObj(){
 			var suffixes = ["мм", "мм", "мм", "мм", "мм", "--", "--", "мм", "мм", "мм", "мм"];
 
 			createTable([names, values, suffixes], "domGuidePlaneTable");
-			// transpose('#domGuidePlaneTable');
 		})();
 
 		// (function fillTables(){
@@ -437,10 +416,8 @@ function createRouteObj(){
 		// })();
 
 		(function fillGuidePlaneProfileTable(){
-			// var names = ["Довжина однієї секції", "Товщина стінки на початку секції", "Коефіціент обтиснення стінки", "Коефініент обтиснення стінки в кожному перетині",  "Товщина стінки в кожному перетині", "Зниження профілю планки в кожному перетині", "Висота підкладок для шліфування робочої поверхні планки", "Висота підкладок для шліфування робочої поверхні планки в кожному перетині"];
-			// var names = ["Довжина однієї секції","Товщина стінки на початку секції","Коефіціент обтиснення стінки","artefact","Коефініент обтиснення стінки в кожному перетині","Коефініент обтиснення стінки в кожному перетині","Коефініент обтиснення стінки в кожному перетині","Коефініент обтиснення стінки в кожному перетині","Коефініент обтиснення стінки в кожному перетині","Коефініент обтиснення стінки в кожному перетині","Коефініент обтиснення стінки в кожному перетині","artfeact","Товщина стінки в кожному перетині","Товщина стінки в кожному перетині","Товщина стінки в кожному перетині","Товщина стінки в кожному перетині","Товщина стінки в кожному перетині","Товщина стінки в кожному перетині","Товщина стінки в кожному перетині","artfeact","Зніження профілю планки в кожному перетині","Зніження профілю планки в кожному перетині","Зніження профілю планки в кожному перетині","Зніження профілю планки в кожному перетині","Зніження профілю планки в кожному перетині","Зніження профілю планки в кожному перетині","Зніження профілю планки в кожному перетині","Зніження профілю планки в кожному перетині","Висота підкладок для шліфування робочої поверхні планки","artfeact","Висота підкладок для шліфування робочої поверхні планки в кожному перетині","Висота підкладок для шліфування робочої поверхні планки в кожному перетині","Висота підкладок для шліфування робочої поверхні планки в кожному перетині","Висота підкладок для шліфування робочої поверхні планки в кожному перетині","Висота підкладок для шліфування робочої поверхні планки в кожному перетині","Висота підкладок для шліфування робочої поверхні планки в кожному перетині","Висота підкладок для шліфування робочої поверхні планки в кожному перетині"];
-			// var suffixes = ["мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм","мм",];
-			var names = ["Довжина однієї секції", "Товщина стінки на початку", "Коефіціент обтиснення стінки", "Коефініент обтиснення стінки в кожному перетині", "Товщина стінки в кожному перетині", "Зниження профілю планки в кожному перетині", "Зниження профілю планки на початку", "Виоста підкладок на початку", "Висота підкладок в кожному перетині"];
+
+			var names = ["Довжина однієї секції", "Товщина стінки на початку", "Коефіціент обтиснення стінки", "Коефініент обтиснення стінки в кожному перетині", "Товщина стінки в кожному перетині", "Зниження профілю планки на початку", "Зниження профілю планки в кожному перетині", "Виоста підкладок на початку", "Висота підкладок в кожному перетині"];
 			var values = Object.values(guidePlaneProfile);
 			
 			var suffixes = ["мм","мм","мм","мм","мм","мм","мм","мм","мм"];
@@ -454,7 +431,6 @@ function createRouteObj(){
 			var suffixes = ["мм", "мм","мм", "--", "--", "--", "--", "%", "%", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа"];
 
 			createTable([names, values, suffixes], "domDeformationTable");
-			// transpose('#domDeformationTable');
 		})();
 
 	})
@@ -467,24 +443,3 @@ function createRouteObj(){
 		clearTables();
 	})
 })();
-
-
-
-
-
-
-// var table = document.createElement('table');
-// addObjectToTable(table,obj);
-// document.body.appendChild(table);
-
-// dataWithSubArrays2Obj = {
-//   one: 1,
-//   two: [2,5,6,7],
-//   three: 3
-// }
-
-// dataWithSubArrays1 = ['Text value1', 'Text value2', 'Text value3'];
-// dataWithSubArrays2 = Object.values(dataWithSubArrays2Obj)
-// dataWithSubArrays3 = [['another text value1', 'another text value1', 'another text value1'], 'another text value2', 'another text value3'];
-
-// createTable([dataWithSubArrays1, dataWithSubArrays2, dataWithSubArrays3], 'myTableSubArrays')
