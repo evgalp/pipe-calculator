@@ -123,46 +123,48 @@ function addObjectToTableArr(table, arr, tr) {
 
 // ** table fill with arrays
 
-function createTable(tableData, tableId) {
-
-  var table = document.createElement('table');
-  table.id = tableId;
-  var tableBody = document.createElement('tbody');
-
+function createTable(tableData, tableId,counter) {
+  var table = $('<table></table>');
+  counter=(counter == undefined)?0:++counter;
+  table.attr("id",tableId+counter);
+  var tableBody = $('<tbody></tbody>');
   tableData.forEach(function(rowData) {
-
-    var row = document.createElement('tr');
-
+    var row = $('<tr></tr>');
     rowData.forEach(function(cellData) {
-
-
-
-      var cell = document.createElement('td');
-      cell.appendChild(document.createTextNode(cellData));
-      row.appendChild(cell);
+      var cell = $('<td></td>');
+      if(Array.isArray(cellData)){
+      cellData = createTable([cellData], tableId,counter);
+      cell.append(cellData);
+      }else{
+        cellData=$('<div></div>').append($('<div class="data"></div>').append(cellData)).html();
+        cell.append((cellData));
+      }
+      row.append(cell);
     });
-
-    tableBody.appendChild(row);
+    tableBody.append(row);
   });
-
-  table.appendChild(tableBody);
-
-  document.body.appendChild(table);
+  table.append(tableBody);
+  $('body').append(table);
+  transpose("#"+tableId+counter);
+  return table;
+}
+function log(msg){
+  $('#log').append('<br>'+msg);
 }
 
 function transpose(tableId){
   $(tableId).each(function() {
     var $this = $(this);
     var newrows = [];
-    $this.find("tr").each(function(){
+    $(tableId+">tbody>tr").each(function(){
       var i = 0;
-      $(this).find("td").each(function(){
+      $(this).find(">td").each(function(){
           i++;
           if(newrows[i] === undefined) { newrows[i] = $("<tr></tr>"); }
           newrows[i].append($(this));
       });
     });
-    $this.find("tr").remove();
+    $(tableId+">tbody>tr").remove();
     $.each(newrows, function(){
         $this.append(this);
     });
@@ -171,17 +173,17 @@ function transpose(tableId){
 }
 
 function clearTables(){
-	if($("#domRollSizeTable").length){
-		$("#domRollSizeTable").remove();
+	if($("#domRollSizeTable0").length){
+		$("#domRollSizeTable0").remove();
 	}
-	if($("#domGuidePlaneTable").length){
-		$("#domGuidePlaneTable").remove();
+	if($("#domGuidePlaneTable0").length){
+		$("#domGuidePlaneTable0").remove();
 	}
-	if($("#domGuidePlaneProfileTable").length){
-		$("#domGuidePlaneProfileTable").remove();
+	if($("#domGuidePlaneProfileTable0").length){
+		$("#domGuidePlaneProfileTable0").remove();
 	}
-	if($("#domDeformationTable").length){
-		$("#domDeformationTable").remove();
+	if($("#domDeformationTable0").length){
+		$("#domDeformationTable0").remove();
 	}
 }
 
@@ -331,27 +333,7 @@ function calcDeformation(mill, route, material){
 }
 
 
-
-// calcGuidePlaneSize(millOne, routeOne);
-// calcGuidePlaneProfile(millOne, routeOne);
-// calcRollSize(millOne, routeOne);
-// calcDeformation(millOne, routeOne, materialOne);
-
-// console.log(millOne);
-// console.log(rollSize);
-// console.log(guidePlane);
-// console.log(guidePlaneProfile);
-// console.log(deformation);
-
-// console.table([millOne]);
-// console.table([rollSize]);
-// console.table([guidePlane]);
-// console.table([guidePlaneProfile]);
-
-
 // DOM interactions
-
-
 
 function createMillObj(e){
 
@@ -403,17 +385,18 @@ function createRouteObj(){
 		var rollSize = calcRollSize(activeMill, activeRoute);
 		var guidePlane = calcGuidePlaneSize(activeMill, activeRoute);
 		var guidePlaneProfile = calcGuidePlaneProfile(activeMill, activeRoute);
+		console.log(guidePlaneProfile);
+		console.log(Object.values(guidePlaneProfile));
 		var deformation = calcDeformation(activeMill, activeRoute, activeMaterial);
 
 		clearTables();
 
 		(function fillRollSizeTable(){
-			var names = ["Діаметр реборд", "Діаметр дна ролика", "Мінімальна товщина реборд", "Діаметр, що катає", "\u03B1", "\u03B2", "\u03B4", "\u03B3", "радіус"];
+			var names = ["Діаметр реборд", "Діаметр дна ролика", "Мінімальна товщина реборд", "Діаметр, що катає", "\u03B1", "\u03B2", "\u03B4", "\u03B3", "Радіус випуску"];
 			var values = Object.values(rollSize);
 			var suffixes = ["мм", "мм", "мм", "мм", "--", "--", "--", "--", "мм"];
 
 			createTable([names, values, suffixes], "domRollSizeTable");
-			transpose('#domRollSizeTable');
 		})();
 
 		(function fillGuidePlaneTable(){
@@ -422,14 +405,22 @@ function createRouteObj(){
 			var suffixes = ["мм", "мм", "мм", "мм", "мм", "--", "--", "мм", "мм", "мм", "мм"];
 
 			createTable([names, values, suffixes], "domGuidePlaneTable");
-			transpose('#domGuidePlaneTable');
 		})();
 
-		(function fillTables(){
-			var domGuidePlaneProfileTable = document.createElement('table');
-			domGuidePlaneProfileTable.id = "domGuidePlaneProfileTable";
-			addObjectToTableArr(domGuidePlaneProfileTable, guidePlaneProfile);
-			document.body.appendChild(domGuidePlaneProfileTable);
+		// (function fillTables(){
+		// 	var domGuidePlaneProfileTable = document.createElement('table');
+		// 	domGuidePlaneProfileTable.id = "domGuidePlaneProfileTable";
+		// 	addObjectToTableArr(domGuidePlaneProfileTable, guidePlaneProfile);
+		// 	document.body.appendChild(domGuidePlaneProfileTable);
+		// })();
+
+		(function fillGuidePlaneProfileTable(){
+			var names = ["Довжина однієї секції", "Товщина стінки на початку", "Коефіціент обтиснення стінки", "Коефініент обтиснення стінки в кожному перетині", "Товщина стінки в кожному перетині", "Зниження профілю планки в кожному перетині", "Зниження профілю планки на початку", "Виоста підкладок на початку", "Висота підкладок в кожному перетині"];
+			var values = Object.values(guidePlaneProfile);
+			
+			var suffixes = ["мм","мм","мм","мм","мм","мм","мм","мм","мм"];
+
+			createTable([names, values, suffixes], "domGuidePlaneProfileTable");
 		})();
 
 		(function fillDeformationTable(){
@@ -438,7 +429,6 @@ function createRouteObj(){
 			var suffixes = ["мм", "мм","мм", "--", "--", "--", "--", "%", "%", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа"];
 
 			createTable([names, values, suffixes], "domDeformationTable");
-			transpose('#domDeformationTable');
 		})();
 
 	})
@@ -451,12 +441,3 @@ function createRouteObj(){
 		clearTables();
 	})
 })();
-
-
-
-
-
-
-// var table = document.createElement('table');
-// addObjectToTable(table,obj);
-// document.body.appendChild(table);
