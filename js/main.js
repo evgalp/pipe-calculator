@@ -43,6 +43,7 @@ function Material(sigmaB1, sigmaB2){
 	return this;
 }
 
+// modules
 
 var serviceModule = (function(){
 
@@ -347,6 +348,8 @@ var renderModule = (function(){
 	}
 
 })();
+
+// handlers
 
 var eventHandler = (function(){
 
