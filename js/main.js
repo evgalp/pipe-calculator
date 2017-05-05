@@ -93,7 +93,7 @@ var calcModule = (function(){
 
 	function calcGuidePlaneProfile(mill, route){
 
-		var guidePlane = calcModule.calcGuidePlaneSize(mill, route);
+		// var guidePlane = calcModule.calcGuidePlaneSize(mill, route);
 		var guidePlaneProfile = {};
 		guidePlaneProfile.oneSectionLength = guidePlane.wallReductionSection / 7;
 		guidePlaneProfile.tp = parseFloat(route.sigmaT) + parseFloat(route.billetWallThicknessInitial);
@@ -127,7 +127,7 @@ var calcModule = (function(){
 
 	function calcDeformation(mill, route, material){
 
-		var guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
+		// var guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
 
 		var deformation = {};
 
@@ -348,73 +348,43 @@ var renderModule = (function(){
 
 })();
 
+var eventHandler = (function(){
 
+	var calcBtn = $("#makeCalc");
+	calcBtn.on('click', calcHandler);
 
-// other service functions
+	function calcHandler(){
+		var mill = cacheDomModule.cacheMill();
+		var route = cacheDomModule.cacheRoute();
+		var material = cacheDomModule.cacheMaterial();
+		
+		rollSize = calcModule.calcRollSize(mill, route);
+		guidePlane = calcModule.calcGuidePlaneSize(mill, route);
+		guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
+		deformation = calcModule.calcDeformation(mill, route, material);
 
+		renderModule.clearTables();
 
+		renderModule.renderRollSizeTable();
+		renderModule.renderGuidePlaneTable();
+		renderModule.renderGuidePlaneProfileTable();
+		renderModule.renderDeformationTable();
 
+	}
 
-// main objects
+	var clearBtn = $("#clearCalc");
+	clearBtn.on('click', clearHandler);
+
+	function clearHandler(){
+		renderModule.clearTables();
+	}
+
+})();
+
+// test objects
 
 // var millOne =  new RollingMill(82, 0.5, 60, 3, 455, 210, 69, 12, 45, 1.6, 4.55);
 
 // var routeOne = new Route(17.5, 16.3, 0.7, 0.35);
 
 // var materialOne = new Material(660, 720, 693, 756);
-
-// functions
-
-
-
-// DOM interactions
-
-// rollSizeX = calcModule.calcRollSize(millOne, routeOne);
-// guidePlaneX = calcModule.calcGuidePlaneSize(millOne, routeOne);
-// guidePlaneProfileX = calcModule.calcGuidePlaneProfile(millOne, routeOne);
-// deformationX = calcModule.calcDeformation(millOne, routeOne, materialOne);
-
-// console.log(rollSizeX);
-// console.log(guidePlaneX);
-// console.log(guidePlaneProfileX);
-// console.log(deformationX);
-
-
-
-
-
-
-
-
-// (function mainCalc(){
-// 	var makeCalc = document.getElementById("makeCalc");
-
-// 	makeCalc.addEventListener('click', function(){
-// 		var activeMill = createMillObj();
-// 		var activeRoute = createRouteObj();
-// 		var activeMaterial = createMaterialObj();
-
-
-// 		var rollSize = calcRollSize(activeMill, activeRoute);
-// 		var guidePlane = calcGuidePlaneSize(activeMill, activeRoute);
-// 		var guidePlaneProfile = calcGuidePlaneProfile(activeMill, activeRoute);
-// 		console.log(guidePlaneProfile);
-// 		console.log(Object.values(guidePlaneProfile));
-// 		var deformation = calcDeformation(activeMill, activeRoute, activeMaterial);
-
-// 		clearTables();
-
-
-
-// 		// (function fillTables(){
-// 		// 	var domGuidePlaneProfileTable = document.createElement('table');
-// 		// 	domGuidePlaneProfileTable.id = "domGuidePlaneProfileTable";
-// 		// 	addObjectToTableArr(domGuidePlaneProfileTable, guidePlaneProfile);
-// 		// 	document.body.appendChild(domGuidePlaneProfileTable);
-// 		// })();
-
-
-
-// 	})
-// })();
-
