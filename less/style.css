@@ -214,6 +214,14 @@ header .title-small .home svg {
   text-align: center;
   padding-top: 20px;
 }
+.main-menu .button-small {
+  width: 45%;
+  height: 150px;
+  line-height: 150px;
+  margin: 20px auto;
+  vertical-align: middle;
+  text-align: center;
+}
 .calc-form {
   margin: 20px 10px;
   border: 1px solid #006591;
@@ -317,6 +325,9 @@ table .table-head td {
 }
 #domDeformationTable0:before {
   content: 'Параметри деформації';
+}
+#domProductivityTable0:before {
+  content: 'Параметри продуктивності';
 }
 #domGuidePlaneProfileTable0 table {
   margin: 0;

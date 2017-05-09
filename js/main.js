@@ -3,7 +3,7 @@ String.prototype.float = function() {
 }
 
 //constructors
-function RollingMill(baseRollDiameter, sigmaHalf, alpha, n, carriageStrokeLength, L, carriageStrokeLengthRotational, reductionSectionLength, trunnionDiameter, DkDcMax, m){
+function RollingMill(baseRollDiameter, sigmaHalf, alpha, n, carriageStrokeLength, L, carriageStrokeLengthRotational, reductionSectionLength, trunnionDiameter, DkDcMax, m, mx, reductionZoneLength, frequency, mMax){
 	this.baseRollDiameter = baseRollDiameter;
 	this.sigmaHalf = sigmaHalf;
 	this.sigma = this.sigmaHalf * 2;
@@ -16,15 +16,20 @@ function RollingMill(baseRollDiameter, sigmaHalf, alpha, n, carriageStrokeLength
 	this.trunnionDiameter = trunnionDiameter;
 	this.DkDcMax = DkDcMax;
 	this.m = m;
+	this.mx = mx;
+	this.reductionZoneLength = reductionZoneLength;
+	this.frequency = frequency;
+	this.mMax = mMax;
 
 	return this;
 }
 
-function Route(billetDiameterInitial, billetDiameterFinal, billetWallThicknessInitial, billetWallThicknessFinal){
+function Route(billetDiameterInitial, billetDiameterFinal, billetWallThicknessInitial, billetWallThicknessFinal, billetLengthInitial, pauseTime){
 	this.billetDiameterInitial = billetDiameterInitial;
 	this.billetDiameterFinal = billetDiameterFinal;
 	this.billetWallThicknessInitial = billetWallThicknessInitial;
 	this.billetWallThicknessFinal = billetWallThicknessFinal;
+	this.billetLengthInitial = billetLengthInitial;
 
 	if(this.billetWallThicknessInitial < 1){
 		this.sigmaT = 0.12;
@@ -32,6 +37,8 @@ function Route(billetDiameterInitial, billetDiameterFinal, billetWallThicknessIn
 	if(this.billetWallThicknessInitial > 1){
 		this.sigmaT = 0.10;
 	}
+
+	this.pauseTime = pauseTime;
 
 	return this;
 }
@@ -154,11 +161,24 @@ var calcModule = (function(){
 		return deformation;
 	}
 
+	function calcProductivity(mill, route){
+		var productivity = {};
+
+		productivity.elongationRatio = ( (route.billetDiameterInitial - route.billetWallThicknessInitial) * route.billetWallThicknessInitial ) / ( (route.billetDiameterFinal - route.billetWallThicknessFinal) * route.billetWallThicknessFinal );
+
+		productivity.linearShift = mill.reductionZoneLength * ( productivity.elongationRatio / (productivity.elongationRatio - 1) ) * Math.log(mill.mx);
+
+		productivity.hourProductivity = 60 / ( (1000 / (productivity.linearShift * mill.frequency)) + (route.pauseTime / (60 * productivity.elongationRatio * mill.reductionZoneLength)) )
+
+		return productivity;
+	}
+
 	return{
 		calcRollSize: calcRollSize,
 		calcGuidePlaneSize: calcGuidePlaneSize,
 		calcGuidePlaneProfile: calcGuidePlaneProfile,
-		calcDeformation: calcDeformation
+		calcDeformation: calcDeformation, 
+		calcProductivity: calcProductivity
 	}
 
 })();
@@ -170,10 +190,10 @@ var cacheDomModule = (function(){
 	function cacheMill(){
 		var selectedMill = calcForm.find('#millSelect').val();
 		if(selectedMill == 'mill_8_15'){
-			var activeMill = new RollingMill(53.15, 0.5, 60, 3, 450, 150, 69, 12, 28.5, 1.4, 4.55);
+			var activeMill = new RollingMill(53.15, 0.5, 60, 3, 450, 150, 69, 12, 28.5, 1.4, 4.55, 1.055, 170, 110, 9);
 		}
 		if(selectedMill == 'mill_15_30'){
-			var activeMill = new RollingMill(82, 0.5, 60, 3, 455, 210, 69, 12, 45, 1.6, 4.55);
+			var activeMill = new RollingMill(82, 0.5, 60, 3, 455, 210, 69, 12, 45, 1.6, 4.55, 1.055, 170, 90, 12);
 		}
 		return activeMill;
 	}
@@ -191,7 +211,13 @@ var cacheDomModule = (function(){
 		var billetDiameterFinal = (calcForm.find('#billetDiameterFinal').val()).float();
 		var billetWallThicknessInitial = (calcForm.find('#billetWallThicknessInitial').val()).float();
 		var billetWallThicknessFinal = (calcForm.find('#billetWallThicknessFinal').val()).float();
-		var activeRoute = new Route (billetDiameterInitial, billetDiameterFinal, billetWallThicknessInitial, billetWallThicknessFinal);
+		if( (calcForm.find('#billetLengthInitial')).length ){
+			var billetLengthInitial = (calcForm.find('#billetLengthInitial').val()).float();
+		}
+		if( (calcForm.find('#pauseTime')).length ){
+			var pauseTime = (calcForm.find('#pauseTime').val()).float();
+		}
+		var activeRoute = new Route (billetDiameterInitial, billetDiameterFinal, billetWallThicknessInitial, billetWallThicknessFinal, billetLengthInitial, pauseTime);
 		return activeRoute;
 	}
 
@@ -294,6 +320,9 @@ var renderModule = (function(){
 		if($("#domDeformationTable0").length){
 			$("#domDeformationTable0").remove();
 		}
+		if($("#domProductivityTable0").length){
+			$("#domProductivityTable0").remove();
+		}
 	}
 
 	function clearByBtn(){
@@ -335,6 +364,14 @@ var renderModule = (function(){
 		addArraysToTable([names, values, suffixes], "domGuidePlaneProfileTable");
 	}
 
+	function renderProductivityTable(){
+		var names = ["Коефіціент витяжки", "Лінійне зміщення", "Годинна продуктивність"];
+		var values = Object.values(productivity);
+		var suffixes = ["мм", "--", "м/год"];
+
+		addArraysToTable([names, values, suffixes], "domProductivityTable");
+	}
+
 	return{
 		addObjectToTable: addObjectToTable,
 		addArraysToTable: addArraysToTable,
@@ -344,7 +381,8 @@ var renderModule = (function(){
 		renderRollSizeTable: renderRollSizeTable,
 		renderGuidePlaneTable: renderGuidePlaneTable,
 		renderGuidePlaneProfileTable: renderGuidePlaneProfileTable,
-		renderDeformationTable: renderDeformationTable
+		renderDeformationTable: renderDeformationTable,
+		renderProductivityTable: renderProductivityTable
 	}
 
 })();
@@ -353,10 +391,30 @@ var renderModule = (function(){
 
 var eventHandler = (function(){
 
-	var calcBtn = $("#makeCalc");
-	calcBtn.on('click', calcHandler);
+	var calcInstrument = $("#calcInstrument");
+	calcInstrument.on('click', calcInstrumentHandler);
 
-	function calcHandler(){
+	function calcInstrumentHandler(){
+
+		var mill = cacheDomModule.cacheMill();
+		var route = cacheDomModule.cacheRoute();
+
+		rollSize = calcModule.calcRollSize(mill, route);
+		guidePlane = calcModule.calcGuidePlaneSize(mill, route);
+		guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
+
+		renderModule.clearTables();
+
+		renderModule.renderRollSizeTable();
+		renderModule.renderGuidePlaneTable();
+		renderModule.renderGuidePlaneProfileTable();
+	}
+
+	var calcDeformation = $("#calcDeformation");
+	calcDeformation.on('click', calcDeformationHandler);
+
+	function calcDeformationHandler(){
+
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
 		var material = cacheDomModule.cacheMaterial();
@@ -368,12 +426,49 @@ var eventHandler = (function(){
 
 		renderModule.clearTables();
 
-		renderModule.renderRollSizeTable();
-		renderModule.renderGuidePlaneTable();
-		renderModule.renderGuidePlaneProfileTable();
 		renderModule.renderDeformationTable();
-
 	}
+
+	var calcProductivity = $("#calcProductivity");
+	calcProductivity.on('click', calcProductivityHandler);
+
+	function calcProductivityHandler(){
+		var mill = cacheDomModule.cacheMill();
+		var route = cacheDomModule.cacheRoute();
+		var material = cacheDomModule.cacheMaterial();
+		
+		rollSize = calcModule.calcRollSize(mill, route);
+		guidePlane = calcModule.calcGuidePlaneSize(mill, route);
+		guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
+		deformation = calcModule.calcDeformation(mill, route, material);
+		productivity = calcModule.calcProductivity(mill, route);
+
+		renderModule.clearTables();
+
+		renderModule.renderProductivityTable();
+	}
+
+	// function calcHandler(){
+	// 	var mill = cacheDomModule.cacheMill();
+	// 	var route = cacheDomModule.cacheRoute();
+	// 	var material = cacheDomModule.cacheMaterial();
+		
+	// 	rollSize = calcModule.calcRollSize(mill, route);
+	// 	guidePlane = calcModule.calcGuidePlaneSize(mill, route);
+	// 	guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
+	// 	deformation = calcModule.calcDeformation(mill, route, material);
+	// 	productivity = calcModule.calcProductivity(mill, route);
+
+
+	// 	renderModule.clearTables();
+
+	// 	renderModule.renderRollSizeTable();
+	// 	renderModule.renderGuidePlaneTable();
+	// 	renderModule.renderGuidePlaneProfileTable();
+	// 	renderModule.renderDeformationTable();
+	// 	renderModule.renderProductivityTable();
+
+	// }
 
 	var clearBtn = $("#clearCalc");
 	clearBtn.on('click', clearHandler);

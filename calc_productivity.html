@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Cold Rolling</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="icon" href="favicon.png">
+
+	<link href="https://fonts.googleapis.com/css?family=Arsenal&amp;subset=cyrillic-ext" rel="stylesheet">
+
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+
+	<header>
+		<div class="title-small">
+			<span>Виробництво труб на станах ХПТР: Розрахунок годинної продуктивності стану</span>
+			<a class="home" href="index.html">
+				<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 					viewBox="0 0 512.001 512.001" style="enable-background:new 0 0 512.001 512.001;" xml:space="preserve">
+						<g>
+							<g>
+								<g>
+									<path d="M261.969,171.262c-3.297-3.295-8.64-3.295-11.936,0l-19.351,19.351v-2.13c0-4.662-3.778-8.44-8.44-8.44
+										c-4.662,0-8.44,3.778-8.44,8.44v19.009l-8.782,8.782c-2.414,2.414-3.135,6.044-1.829,9.198c1.305,3.154,4.383,5.21,7.797,5.21
+										h2.813v36.571c0,4.662,3.778,8.44,8.44,8.44h67.516c4.662,0,8.44-3.778,8.44-8.44v-36.573h2.813c3.413,0,6.492-2.056,7.797-5.21
+										c1.306-3.154,0.585-6.783-1.829-9.198L261.969,171.262z M281.319,222.242v36.571h-50.637v-36.571c0-2.156-0.809-4.123-2.14-5.616
+										l27.459-27.459l27.459,27.459C282.128,218.119,281.319,220.086,281.319,222.242z"/>
+									<path d="M256.001,101.277c-66.701,0-120.966,54.265-120.966,120.965c0,66.701,54.265,120.967,120.966,120.967
+										s120.966-54.266,120.966-120.967C376.966,155.542,322.701,101.277,256.001,101.277z M256.001,326.33
+										c-57.393,0-104.087-46.693-104.087-104.088c0-57.393,46.693-104.086,104.087-104.086s104.087,46.692,104.087,104.086
+										C360.087,279.636,313.394,326.33,256.001,326.33z"/>
+								</g>
+							</g>
+						</g>
+					</svg>
+			</a>
+		</div>	
+	</header>
+
+	<div class="wrapper">
+		<div id="calcForm" class="calc-form">
+
+		<div class="dropdowns">
+
+			<div class="mill-selection">
+				<span>Оберіть тип стану ХПТР</span>
+				<select name="millSelect" id="millSelect">
+					<option value="mill_8_15">ХПТР 8-15</option>
+					<option value="mill_15_30">ХПТР 15-30</option>
+				</select>
+			</div>
+
+			<div class="material">
+				<span class="text">Оберіть матеріал</span>
+				<select name="materialSelect" id="materialSelect">
+					<option value="steel_20A">Сталь 20А</option>
+				</select>
+			</div>
+
+		</div>
+
+		<div class="route-selection">
+			<span>Визначте маршрут:</span>
+			<div class="item">
+				<span class="text">Початкова довжина заготовки, м</span>
+				<input id="billetLengthInitial" type="text">
+			</div>
+			<div class="item">
+				<span class="text">Початковий діаметр труби, мм</span>
+				<input id="billetDiameterInitial" type="text">
+			</div>
+			<div class="item">
+				<span class="text">Кінцевий діаметр труби, мм</span>
+				<input id="billetDiameterFinal" type="text">
+			</div>
+			<div class="item">
+				<span class="text">Початкова товщина стінки труби, мм</span>
+				<input id="billetWallThicknessInitial" type="text">
+			</div>
+			<div class="item">
+				<span class="text">Кінцева товщина стінки труби, мм</span>
+				<input id="billetWallThicknessFinal" type="text">
+			</div>
+			<div class="item">
+				<span class="text">Час пауз, с</span>
+				<input id="pauseTime" type="text">
+			</div>
+		</div>
+
+		<div class="calculate">
+			<button id="calcProductivity" class="btn">Виконати розрахунок</button>
+			<button id="clearCalc" class="btn">Очистити резульати</button>
+		</div>
+
+	</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+
+	<script type="text/javascript" src="js/main.js"></script>
+	
+</body>
+</html>
