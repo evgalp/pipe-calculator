@@ -54,12 +54,34 @@ function Material(sigmaB1, sigmaB2){
 
 var serviceModule = (function(){
 
+	function isNumber(n) {
+	  return !isNaN(parseFloat(n)) && isFinite(n);
+	}
+
 	function toRadians (angle) {
 	  return angle * (Math.PI / 180);
 	}
 
+	function roundNumericArrayValues(array, precision){
+		var roundedArray = [];
+
+		array.forEach(function round(elem){
+			if(isNumber(elem)) {
+				roundedArray.push(elem.toFixed(precision));
+			} else if(elem.constructor === Array){
+				roundedArray.push(roundNumericArrayValues(elem, precision));
+			} else {
+				roundedArray.push(elem);
+			}
+		})
+
+		return roundedArray;
+	}
+
 	return{
-		toRadians: toRadians
+		isNumber: isNumber,
+		toRadians: toRadians,
+		roundNumericArrayValues: roundNumericArrayValues
 	}
 
 })();
@@ -84,7 +106,6 @@ var calcModule = (function(){
 		guidePlane.ln = mill.carriageStrokeLengthRotational / (1 + mill.DkDcMax);
 		guidePlane.Yn = (route.billetDiameterInitial / 2) - (route.billetDiameterFinal / 2);
 		guidePlane.Yp = (route.billetWallThicknessInitial) - (route.billetWallThicknessFinal);
-		// TODO - check if slope =< 0.06; if false - ???
 		guidePlane.slope = (guidePlane.Yn - guidePlane.Yp) / mill.reductionSectionLength;
 		if(guidePlane.slope <= 0.06){
 			guidePlane.slopeIsNormal = true;
@@ -333,42 +354,36 @@ var renderModule = (function(){
 
 	function renderRollSizeTable(){
 		var names = ["Діаметр реборд", "Діаметр дна ролика", "Мінімальна товщина реборд", "Діаметр, що катає", "\u03B1", "\u03B2", "\u03B4", "\u03B3", "Радіус випуску"];
-		var values = Object.values(rollSize);
+		var values = serviceModule.roundNumericArrayValues(Object.values(rollSize), 2);
 		var suffixes = ["мм", "мм", "мм", "мм", "--", "--", "--", "--", "мм"];
-
 		addArraysToTable([names, values, suffixes], "domRollSizeTable");
 	}
 
 	function renderGuidePlaneTable(){
 		var names = ["Робоча довжина", "Сумарна довжина ділянок виходу роликів із зіткнення з металом", "Ділянка подачі і повороту", "Зниження профілю планки в кінці ділянки подачі", "Зниження профілю планки в кінці ділянки редукції", "Ухил", "Ухил в межах норми", "Сумарна витяжка за прохід", "Горизонтальна ділянка", "Калібрувальна ділянка", "Ділянка редукції стінки"];
-		var values = Object.values(guidePlane);
+		var values = serviceModule.roundNumericArrayValues(Object.values(guidePlane), 2);
 		var suffixes = ["мм", "мм", "мм", "мм", "мм", "--", "--", "мм", "мм", "мм", "мм"];
-
 		addArraysToTable([names, values, suffixes], "domGuidePlaneTable");
 	}
 
 	function renderDeformationTable(){
 		var names = ["Обтиснення стінки на ділянці 0-1", "Обтиснення стінки на ділянці 1-2", "\u03C1 гр", "\u03B4 1", "\u03B4 2", "Коефініент сумарної витяжки в перетині 1", "Коефініент сумарної витяжки в перетині 2", "Ступінь деформації в перетині 1", "Ступінь деформації в перетині 2", "Опір деформації в перетині 1", "Опір деформації в перетині 2", "Контактний тиск 1 для зони випередження", "Контактний тиск 2 для зони випередження", "Контактний тиск 1 для зони відставання", "Контактний тиск 2 для зони відставання", "Середній контактний тиск 1 в перетині двузонного осередку деформації", "Середній контактний тиск 2 в перетині двузонного осередку деформації"];
-		var values = Object.values(deformation);
+		var values = serviceModule.roundNumericArrayValues(Object.values(deformation), 2);
 		var suffixes = ["мм", "мм","мм", "--", "--", "--", "--", "%", "%", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа", "МПа"];
-
 		addArraysToTable([names, values, suffixes], "domDeformationTable");
 	}
 
 	function renderGuidePlaneProfileTable(){
 		var names = ["Довжина однієї секції", "Товщина стінки на початку", "Коефіціент обтиснення стінки", "Коефініент обтиснення стінки в кожному перетині", "Товщина стінки в кожному перетині", "Зниження профілю планки на початку", "Зниження профілю планки в кожному перетині", "Виоста підкладок на початку", "Висота підкладок в кожному перетині"];
-		var values = Object.values(guidePlaneProfile);
-		
+		var values = serviceModule.roundNumericArrayValues(Object.values(guidePlaneProfile), 2);
 		var suffixes = ["мм","мм","мм","мм","мм","мм","мм","мм","мм"];
-
 		addArraysToTable([names, values, suffixes], "domGuidePlaneProfileTable");
 	}
 
 	function renderProductivityTable(){
 		var names = ["Коефіціент витяжки", "Лінійне зміщення", "Годинна продуктивність"];
-		var values = Object.values(productivity);
+		var values = serviceModule.roundArrayValues(Object.values(productivity));
 		var suffixes = ["мм", "--", "м/год"];
-
 		addArraysToTable([names, values, suffixes], "domProductivityTable");
 	}
 
