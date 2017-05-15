@@ -286,7 +286,7 @@ var renderModule = (function(){
 		var table = $('<table></table>');
 		counter=(counter == undefined)?0:++counter;
 		table.attr("id",tableId+counter);
-		table.attr("class", "uk-table uk-table-hover uk-table-divider")
+		table.attr("class", "uk-align-center uk-table uk-table-striped uk-table-hover uk-table-divider");
 		var tableBody = $('<tbody></tbody>');
 		tableData.forEach(function(rowData) {
 			var row = $('<tr></tr>');
@@ -294,6 +294,7 @@ var renderModule = (function(){
 				var cell = $('<td></td>');
 				if(Array.isArray(cellData)){
 					cellData = addArraysToTable([cellData], tableId,counter);
+					cellData.attr("class", "")
 					cell.append(cellData);
 				}else{
 					cellData=$('<div></div>').append($('<div class="data"></div>').append(cellData)).html();
@@ -304,7 +305,7 @@ var renderModule = (function(){
 			tableBody.append(row);
 		});
 		table.append(tableBody);
-		$('body').append(table);
+		$('#calc-result').append(table);
 		transpose("#"+tableId+counter);
 		return table;
 	}
