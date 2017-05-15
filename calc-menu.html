@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Cold Rolling</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="icon" href="favicon.png">
+	<link rel="stylesheet" href="css/uikit.min.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+	<header class="uk-container-expand uk-flex uk-flex-middle uk-flex-between uk-background-primary uk-padding uk-light uk-text-large">
+		<h2 class="uk-margin-remove uk-text-large">Розрахунки для станів ХПТР</h2>
+		<a href="index.html" class="uk-margin-small-right" uk-icon="icon: home; ratio: 2"></a>
+	</header>
+
+	<section class="calc-menu uk-container-expand">
+		<ul uk-tab class="calc-tabs uk-child-width-expand uk-margin-remove">
+	    <li class="uk-padding-remove"><a href="#">Калібровка інструменту</a></li>
+	    <li class="uk-padding-remove"><a href="#">Енергосилові параметри</a></li>
+	    <li class="uk-padding-remove"><a href="#">Продуктивність</a></li>
+		</ul>
+
+		<ul class="uk-switcher uk-margin-remove">
+	    <li class="uk-container-large uk-grid-large uk-grid-collapse uk-padding uk-background-muted">
+	    	<form id="calcForm" class="uk-width-1-2 uk-align-center">
+	    		<div class="uk-margin uk-flex uk-flex-between">
+	    			<label class="uk-form-label" for="millSelect">Тип стану ХПТР:</label>
+	    			<div class="uk-form-controls uk-form-width-medium">
+	    				<select id="millSelect" class="uk-select">
+	    					<option value="mill_8_15">ХПТР 8-15</option>
+	    					<option value="mill_15_30">ХПТР 15-30</option>
+	    				</select>
+	    			</div>
+	    		</div>
+	    		<div class="uk-margin uk-flex uk-flex-between">
+	    			<label class="uk-form-label" for="materialSelect">Матеріал:</label>
+	    			<div class="uk-form-controls uk-form-width-medium">
+	    				<select id="materialSelect" class="uk-select">
+	    					<option value="steel_20A">Сталь 20А</option>
+	    				</select>
+	    			</div>
+	    		</div>
+	    		<div class="uk-margin uk-flex uk-flex-between">
+	    			<label class="uk-form-label" for="billetDiameterInitial">Початковий діаметр, мм:</label>
+	    			<div class="uk-form-controls uk-form-width-medium">
+	    				<input id="billetDiameterInitial" class="uk-input" type="text" placeholder="Початковий діаметр">
+	    			</div>
+	    		</div>
+	    		<div class="uk-margin uk-flex uk-flex-between">
+	    			<label class="uk-form-label" for="billetDiameterFinal">Кінцевий діаметр, мм:</label>
+	    			<div class="uk-form-controls uk-form-width-medium">
+	    				<input id="billetDiameterFinal" class="uk-input" type="text" placeholder="Кінцевий діаметр">
+	    			</div>
+	    		</div>
+	    		<div class="uk-margin uk-flex uk-flex-between">
+	    			<label class="uk-form-label" for="billetWallThicknessInitial">Початкова товщина стінки, мм:</label>
+	    			<div class="uk-form-controls uk-form-width-medium">
+	    				<input id="billetWallThicknessInitial" class="uk-input" type="text" placeholder="Початкова товщина стінки">
+	    			</div>
+	    		</div>
+	    		<div class="uk-margin uk-flex uk-flex-between">
+	    			<label class="uk-form-label" for="billetWallThicknessFinal">Кінцева товщина стінки, мм:</label>
+	    			<div class="uk-form-controls uk-form-width-medium">
+	    				<input id="billetWallThicknessFinal" class="uk-input" type="text" placeholder="Кінцева товщина стінки">
+	    			</div>
+	    		</div>
+	    		<div class="uk-margin uk-flex uk-flex-between">
+	    			<label class="uk-form-label" for="billetLengthInitial">Довжина заготовки, м:</label>
+	    			<div class="uk-form-controls uk-form-width-medium">
+	    				<input id="billetLengthInitial" class="uk-input" type="text" placeholder="Довжина заготовки">
+	    			</div>
+	    		</div>
+	    		<div class="uk-margin uk-flex uk-flex-between">
+	    			<label class="uk-form-label" for="pauseTime">Час пауз, с:</label>
+	    			<div class="uk-form-controls uk-form-width-medium">
+	    				<input id="pauseTime" class="uk-input" type="text" placeholder="Час пауз">
+	    			</div>
+	    		</div>
+	    		<div class="uk-margin uk-flex uk-flex-between">
+	    			<div id="calcInstrument" class="uk-button uk-button-primary">Виконати рохрахунки</div>
+    				<div id="clearCalc" class="uk-button uk-button-secondary">Очитстити результати</div>
+	    		</div>
+	    	</form>
+	    </li>
+	    <li>
+	    	Two
+	    </li>
+	    <li>
+	    	Three
+	    </li>
+		</ul>
+	</section>
+
+	<script type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
+	<script type="text/javascript" src="js/uikit.min.js"></script>
+	<script type="text/javascript" src="js/uikit-icons.min.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+
+	
+</body>
+</html>

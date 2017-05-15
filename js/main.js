@@ -286,6 +286,7 @@ var renderModule = (function(){
 		var table = $('<table></table>');
 		counter=(counter == undefined)?0:++counter;
 		table.attr("id",tableId+counter);
+		table.attr("class", "uk-table uk-table-hover uk-table-divider")
 		var tableBody = $('<tbody></tbody>');
 		tableData.forEach(function(rowData) {
 			var row = $('<tr></tr>');
