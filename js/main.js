@@ -31,7 +31,7 @@ function Route(billetDiameterInitial, billetDiameterFinal, billetWallThicknessIn
 	this.billetWallThicknessFinal = billetWallThicknessFinal;
 	this.billetLengthInitial = billetLengthInitial;
 
-	if(this.billetWallThicknessInitial < 1){
+	if(this.billetWallThicknessInitial <= 1){
 		this.sigmaT = 0.12;
 	}
 	if(this.billetWallThicknessInitial > 1){
@@ -206,10 +206,12 @@ var calcModule = (function(){
 
 var cacheDomModule = (function(){
 
-	var calcForm = $('#calcForm');
+	// var calcForm = $('#calcForm');
+	var calcForm = calcFormCurrent;
+
 
 	function cacheMill(){
-		var selectedMill = calcForm.find('#millSelect').val();
+		var selectedMill = calcForm.find('.millSelect').val();
 		if(selectedMill == 'mill_8_15'){
 			var activeMill = new RollingMill(53.15, 0.5, 60, 3, 450, 150, 69, 12, 28.5, 1.4, 4.55, 1.055, 170, 110, 9);
 		}
@@ -220,7 +222,7 @@ var cacheDomModule = (function(){
 	}
 
 	function cacheMaterial(){
-		var selectedMaterial = calcForm.find('#materialSelect').val();
+		var selectedMaterial = calcForm.find('.materialSelect').val();
 		if(selectedMaterial == 'steel_20A'){
 			var activeMaterial = new Material(660, 720);
 		}
@@ -228,15 +230,15 @@ var cacheDomModule = (function(){
 	}
 
 	function cacheRoute(){
-		var billetDiameterInitial = (calcForm.find('#billetDiameterInitial').val()).float();
-		var billetDiameterFinal = (calcForm.find('#billetDiameterFinal').val()).float();
-		var billetWallThicknessInitial = (calcForm.find('#billetWallThicknessInitial').val()).float();
-		var billetWallThicknessFinal = (calcForm.find('#billetWallThicknessFinal').val()).float();
-		if( (calcForm.find('#billetLengthInitial')).length ){
-			var billetLengthInitial = (calcForm.find('#billetLengthInitial').val()).float();
+		var billetDiameterInitial = (calcForm.find('.billetDiameterInitial').val()).float();
+		var billetDiameterFinal = (calcForm.find('.billetDiameterFinal').val()).float();
+		var billetWallThicknessInitial = (calcForm.find('.billetWallThicknessInitial').val()).float();
+		var billetWallThicknessFinal = (calcForm.find('.billetWallThicknessFinal').val()).float();
+		if( (calcForm.find('.billetLengthInitial')).length ){
+			var billetLengthInitial = (calcForm.find('.billetLengthInitial').val()).float();
 		}
-		if( (calcForm.find('#pauseTime')).length ){
-			var pauseTime = (calcForm.find('#pauseTime').val()).float();
+		if( (calcForm.find('.pauseTime')).length ){
+			var pauseTime = (calcForm.find('.pauseTime').val()).float();
 		}
 		var activeRoute = new Route (billetDiameterInitial, billetDiameterFinal, billetWallThicknessInitial, billetWallThicknessFinal, billetLengthInitial, pauseTime);
 		return activeRoute;
@@ -413,6 +415,8 @@ var eventHandler = (function(){
 
 	function calcInstrumentHandler(){
 
+		var calcFormCurrent = $("#calcInstrumentForm");
+
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
 
@@ -432,6 +436,8 @@ var eventHandler = (function(){
 
 	function calcDeformationHandler(){
 
+		var calcFormCurrent = $("#calcDeformationForm");
+
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
 		var material = cacheDomModule.cacheMaterial();
@@ -450,6 +456,9 @@ var eventHandler = (function(){
 	calcProductivity.on('click', calcProductivityHandler);
 
 	function calcProductivityHandler(){
+
+		var calcFormCurrent = $("#calcProductivityForm");
+
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
 		var material = cacheDomModule.cacheMaterial();
