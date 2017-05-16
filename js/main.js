@@ -206,9 +206,7 @@ var calcModule = (function(){
 
 var cacheDomModule = (function(){
 
-	// var calcForm = $('#calcForm');
-	var calcForm = calcFormCurrent;
-
+	var calcForm = $('#calcForm');
 
 	function cacheMill(){
 		var selectedMill = calcForm.find('.millSelect').val();
@@ -415,8 +413,6 @@ var eventHandler = (function(){
 
 	function calcInstrumentHandler(){
 
-		var calcFormCurrent = $("#calcInstrumentForm");
-
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
 
@@ -435,8 +431,6 @@ var eventHandler = (function(){
 	calcDeformation.on('click', calcDeformationHandler);
 
 	function calcDeformationHandler(){
-
-		var calcFormCurrent = $("#calcDeformationForm");
 
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
@@ -457,8 +451,6 @@ var eventHandler = (function(){
 
 	function calcProductivityHandler(){
 
-		var calcFormCurrent = $("#calcProductivityForm");
-
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
 		var material = cacheDomModule.cacheMaterial();
@@ -474,28 +466,6 @@ var eventHandler = (function(){
 		renderModule.renderProductivityTable();
 	}
 
-	// function calcHandler(){
-	// 	var mill = cacheDomModule.cacheMill();
-	// 	var route = cacheDomModule.cacheRoute();
-	// 	var material = cacheDomModule.cacheMaterial();
-		
-	// 	rollSize = calcModule.calcRollSize(mill, route);
-	// 	guidePlane = calcModule.calcGuidePlaneSize(mill, route);
-	// 	guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
-	// 	deformation = calcModule.calcDeformation(mill, route, material);
-	// 	productivity = calcModule.calcProductivity(mill, route);
-
-
-	// 	renderModule.clearTables();
-
-	// 	renderModule.renderRollSizeTable();
-	// 	renderModule.renderGuidePlaneTable();
-	// 	renderModule.renderGuidePlaneProfileTable();
-	// 	renderModule.renderDeformationTable();
-	// 	renderModule.renderProductivityTable();
-
-	// }
-
 	var clearBtn = $("#clearCalc");
 	clearBtn.on('click', clearHandler);
 
@@ -505,10 +475,4 @@ var eventHandler = (function(){
 
 })();
 
-// test objects
 
-// var millOne =  new RollingMill(82, 0.5, 60, 3, 455, 210, 69, 12, 45, 1.6, 4.55);
-
-// var routeOne = new Route(17.5, 16.3, 0.7, 0.35);
-
-// var materialOne = new Material(660, 720, 693, 756);
