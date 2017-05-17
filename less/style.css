@@ -1,48 +1,268 @@
-body a:hover {
-  text-decoration: none;
-  opacity: .9;
+html,
+body {
+  border: 0;
+  font-family: "Helvetica-Neue", "Helvetica", Arial, sans-serif;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
 }
-header.main-header {
-  height: 13.7vh;
+div,
+span,
+object,
+iframe,
+img,
+table,
+caption,
+thead,
+tbody,
+tfoot,
+tr,
+tr,
+td,
+article,
+aside,
+canvas,
+details,
+figure,
+hgroup,
+menu,
+nav,
+footer,
+header,
+section,
+summary,
+mark,
+audio,
+video {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+address,
+cit,
+code,
+del,
+dfn,
+em,
+ins,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+b,
+i,
+hr,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+legend,
+label {
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+}
+article,
+aside,
+canvas,
+figure,
+figure img,
+figcaption,
+hgroup,
+footer,
+header,
+nav,
+section,
+audio,
+video {
+  display: block;
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+table caption,
+table th,
+table td {
+  text-align: left;
+  vertical-align: middle;
+}
+a img {
+  border: 0;
+}
+:focus {
+  outline: 0;
+}
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+body * {
+  color: #006591;
+  font-family: sans-serif;
+}
+body a {
+  display: block;
+  text-decoration: none;
+}
+.wrapper {
+  margin: 0 auto;
+  max-width: 90%;
+}
+header {
+  max-width: 100%;
+  width: 100%;
+  height: 15vh;
+  background: #006591;
+  display: flex;
+  align-items: center;
+}
+header .title {
+  font-size: 40px;
+  text-align: center;
+  color: #fff;
+}
+header .title-small {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 20px;
+  width: 100%;
+}
+header .title-small span {
+  font-size: 30px;
+  color: #fff;
+}
+header .title-small .home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header .title-small .home svg {
+  width: 100px;
+  height: 100px;
+  fill: #fff;
+  stroke-width: 1;
+}
+.main-menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 .main-menu .button {
-  height: 40vh;
-  box-shadow: inset 0 0 0 1px #ccc;
+  width: 50%;
+  height: 42.5vh;
+  background: #f2f4f6;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  box-shadow: inset 0 0px 0px 1px rgba(0, 0, 0, 0.1);
 }
 .main-menu .button:hover {
-  background-color: #F8F8FE;
-  cursor: pointer;
+  background: #F2F2FB;
 }
-.main-menu .button a:hover {
-  text-decoration: none;
+.main-menu .button:hover .container .icon svg {
+  fill: #0065F4;
 }
-.main-menu .button svg {
+.main-menu .button:hover .container .icon svg path {
+  stroke: #0065F4;
+}
+.main-menu .button:hover .container .text {
+  color: #0065F4;
+}
+.main-menu .button .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.main-menu .button .container .icon {
   width: 80px;
   height: 80px;
-  fill: #1e87f0;
 }
-.main-menu .button svg path {
-  stroke: #1e87f0;
+.main-menu .button .container .icon svg {
+  width: 80px;
+  height: 80px;
+  fill: #006591;
 }
-.calc-menu .calc-tabs:before {
-  left: 0;
+.main-menu .button .container .icon svg path {
+  stroke: #006591;
 }
-.calc-menu .calc-tabs a {
-  padding: 20px 0;
+.main-menu .button .container .text {
+  color: #006591;
+  font-size: 25px;
+  text-align: center;
+  padding-top: 20px;
+}
+.main-menu .button-small {
+  width: 45%;
+  height: 150px;
+  line-height: 150px;
+  margin: 20px auto;
+  vertical-align: middle;
+  text-align: center;
 }
 .calc-form {
-  max-width: 500px;
+  margin: 20px 10px;
+  border: 1px solid #006591;
+  border-radius: 15px;
+  padding: 15px 0;
 }
-.calc-result .uk-table {
-  position: relative;
+.calc-form > * {
+  max-width: 600px;
+  margin: 25px auto;
+}
+.calc-form .dropdowns {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+}
+.calc-form .route-selection {
+  font-size: 20px;
+}
+.calc-form .route-selection .item {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+.calc-form .route-selection .item .text {
+  vertical-align: middle;
+}
+.calc-form .route-selection .item input {
+  vertical-align: middle;
+}
+.calc-form .calculate {
+  text-align: center;
+}
+table {
   margin: 60px auto;
-  max-width: 50%;
-  display: table;
+  max-width: 80%;
+  border: 1px solid #006591;
+  position: relative;
 }
-.calc-result .uk-table:before {
-  display: none;
+table:before {
   content: '';
-  background: #1e87f0;
+  background: #006591;
   display: block;
   color: #fff;
   position: absolute;
@@ -51,30 +271,112 @@ header.main-header {
   padding: 5px 5px 5px 5px;
   width: 100%;
   padding: 5px 0px 5px 5px;
-  width: 99.0%;
+  width: 99.8%;
   text-align: center;
 }
-.calc-result .uk-table td {
-  vertical-align: middle;
+table tr:nth-child(odd) {
+  background: #fff;
 }
-.calc-result .uk-table tr td table tr {
-  background: inherit;
+table tr:nth-child(even) {
+  background: #EAF3F3;
 }
-.calc-result .uk-table tr td table tr td {
-  padding: 0;
+table tr td {
+  overflow: hidden;
+  padding: 2px 10px;
+  border-right: 1px solid #006591;
 }
-.calc-result #domRollSizeTable0:before {
+table tr td:nth-child(2) {
+  text-align: right;
+}
+table tr td:last-child {
+  border-right: 0;
+}
+table .table-head {
+  background: #167F92 !important;
+}
+table .table-head td {
+  color: #fff;
+}
+#domRollSizeTable0:before {
   content: 'Параметри роликів';
 }
-.calc-result #domGuidePlaneTable0:before {
+#domGuidePlaneTable0:before {
   content: 'Параметри опорних планок';
 }
-.calc-result #domGuidePlaneProfileTable0:before {
+#domGuidePlaneProfileTable0 {
+  border: none;
+  border-left: 1px solid #006591;
+  border-bottom: 1px solid #006591;
+}
+#domGuidePlaneProfileTable0:before {
   content: 'Параметри профілю опорних планок';
 }
-.calc-result #domDeformationTable0:before {
+#domGuidePlaneProfileTable0 tr td {
+  text-align: left;
+  border: none;
+  box-shadow: inset 0px 1px 0px 0px #006591;
+  border-right: 1px solid #006591;
+}
+#domGuidePlaneProfileTable0 tr td table tr:nth-child(odd) {
+  background: inherit;
+}
+#domGuidePlaneProfileTable0 tr td table tr:nth-child(even) {
+  background: inherit;
+}
+#domDeformationTable0:before {
   content: 'Параметри деформації';
 }
-.calc-result #domProductivityTable0:before {
+#domProductivityTable0:before {
   content: 'Параметри продуктивності';
+}
+#domGuidePlaneProfileTable0 table {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 100%;
+}
+#domGuidePlaneProfileTable0 table tr {
+  border: 0;
+  width: 100%;
+}
+#domGuidePlaneProfileTable0 table tr td {
+  margin: 0;
+  border: 0;
+  box-shadow: inset 0 0 0 0;
+  padding: 0;
+}
+#domGuidePlaneProfileTable0 table:before {
+  display: none;
+}
+.btn {
+  width: auto;
+  height: 50px;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0;
+  outline: 0;
+  background: #006591;
+  color: #fff;
+  font-size: 20px;
+  padding: 10px 15px;
+}
+.btn:hover {
+  cursor: pointer;
+  opacity: .8;
+}
+input {
+  height: 20px;
+  font-size: 18px;
+  padding: 5px 10px;
+}
+select {
+  height: 20px;
+  font-weight: 400;
+  display: block;
+  width: 200px;
+  height: 50px;
+  margin: 10px 0;
+  font-size: 25px;
+  padding: 0 10px;
+  cursor: pointer;
 }
