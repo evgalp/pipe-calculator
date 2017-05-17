@@ -459,6 +459,8 @@ var eventHandler = (function(){
 		renderModule.renderProductivityTable();
 	}
 
+	$('#clearCalc').on('click', clearHandler);
+
 	$(document).on('click', '#clearCalc', clearHandler);
 
 	function clearHandler(){
