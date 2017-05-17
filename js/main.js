@@ -348,11 +348,6 @@ var renderModule = (function(){
 		}
 	}
 
-	function clearByBtn(){
-		var clearCalc = document.getElementById("clearCalc");
-
-		clearCalc.addEventListener('click', clearTables());
-	}
 
 	function renderRollSizeTable(){
 		var names = ["Діаметр реборд", "Діаметр дна ролика", "Мінімальна товщина реборд", "Діаметр, що катає", "\u03B1", "\u03B2", "\u03B4", "\u03B3", "Радіус випуску"];
@@ -394,7 +389,6 @@ var renderModule = (function(){
 		addArraysToTable: addArraysToTable,
 		transpose: transpose,
 		clearTables: clearTables,
-		clearByBtn: clearByBtn,
 		renderRollSizeTable: renderRollSizeTable,
 		renderGuidePlaneTable: renderGuidePlaneTable,
 		renderGuidePlaneProfileTable: renderGuidePlaneProfileTable,
