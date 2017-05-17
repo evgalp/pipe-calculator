@@ -384,7 +384,7 @@ var renderModule = (function(){
 
 	function renderProductivityTable(){
 		var names = ["Коефіцієнт витяжки", "Лінійне зміщення", "Годинна продуктивність"];
-		var values = serviceModule.roundArrayValues(Object.values(productivity));
+		var values = serviceModule.roundNumericArrayValues(Object.values(productivity));
 		var suffixes = ["мм", "--", "м/год"];
 		addArraysToTable([names, values, suffixes], "domProductivityTable");
 	}
@@ -408,8 +408,7 @@ var renderModule = (function(){
 
 var eventHandler = (function(){
 
-	var calcInstrument = $("#calcInstrument");
-	calcInstrument.on('click', calcInstrumentHandler);
+	$(document).on('click', '#calcInstrument', calcInstrumentHandler);
 
 	function calcInstrumentHandler(){
 
@@ -427,8 +426,7 @@ var eventHandler = (function(){
 		renderModule.renderGuidePlaneProfileTable();
 	}
 
-	var calcDeformation = $("#calcDeformation");
-	calcDeformation.on('click', calcDeformationHandler);
+	$(document).on('click', '#calcDeformation', calcDeformationHandler);
 
 	function calcDeformationHandler(){
 
@@ -446,8 +444,7 @@ var eventHandler = (function(){
 		renderModule.renderDeformationTable();
 	}
 
-	var calcProductivity = $("#calcProductivity");
-	calcProductivity.on('click', calcProductivityHandler);
+	$(document).on('click', '#calcProductivity', calcProductivityHandler);
 
 	function calcProductivityHandler(){
 
@@ -455,10 +452,6 @@ var eventHandler = (function(){
 		var route = cacheDomModule.cacheRoute();
 		var material = cacheDomModule.cacheMaterial();
 		
-		rollSize = calcModule.calcRollSize(mill, route);
-		guidePlane = calcModule.calcGuidePlaneSize(mill, route);
-		guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
-		deformation = calcModule.calcDeformation(mill, route, material);
 		productivity = calcModule.calcProductivity(mill, route);
 
 		renderModule.clearTables();
@@ -466,13 +459,10 @@ var eventHandler = (function(){
 		renderModule.renderProductivityTable();
 	}
 
-	var clearBtn = $("#clearCalc");
-	clearBtn.on('click', clearHandler);
+	$(document).on('click', '#clearCalc', clearHandler);
 
 	function clearHandler(){
 		renderModule.clearTables();
 	}
 
 })();
-
-
