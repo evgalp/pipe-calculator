@@ -31,7 +31,7 @@ function Route(billetDiameterInitial, billetDiameterFinal, billetWallThicknessIn
 	this.billetWallThicknessFinal = billetWallThicknessFinal;
 	this.billetLengthInitial = billetLengthInitial;
 
-	if(this.billetWallThicknessInitial < 1){
+	if(this.billetWallThicknessInitial <= 1){
 		this.sigmaT = 0.12;
 	}
 	if(this.billetWallThicknessInitial > 1){
@@ -209,7 +209,7 @@ var cacheDomModule = (function(){
 	var calcForm = $('#calcForm');
 
 	function cacheMill(){
-		var selectedMill = calcForm.find('#millSelect').val();
+		var selectedMill = calcForm.find('.millSelect').val();
 		if(selectedMill == 'mill_8_15'){
 			var activeMill = new RollingMill(53.15, 0.5, 60, 3, 450, 150, 69, 12, 28.5, 1.4, 4.55, 1.055, 170, 110, 9);
 		}
@@ -220,7 +220,7 @@ var cacheDomModule = (function(){
 	}
 
 	function cacheMaterial(){
-		var selectedMaterial = calcForm.find('#materialSelect').val();
+		var selectedMaterial = calcForm.find('.materialSelect').val();
 		if(selectedMaterial == 'steel_20A'){
 			var activeMaterial = new Material(660, 720);
 		}
@@ -228,15 +228,15 @@ var cacheDomModule = (function(){
 	}
 
 	function cacheRoute(){
-		var billetDiameterInitial = (calcForm.find('#billetDiameterInitial').val()).float();
-		var billetDiameterFinal = (calcForm.find('#billetDiameterFinal').val()).float();
-		var billetWallThicknessInitial = (calcForm.find('#billetWallThicknessInitial').val()).float();
-		var billetWallThicknessFinal = (calcForm.find('#billetWallThicknessFinal').val()).float();
-		if( (calcForm.find('#billetLengthInitial')).length ){
-			var billetLengthInitial = (calcForm.find('#billetLengthInitial').val()).float();
+		var billetDiameterInitial = (calcForm.find('.billetDiameterInitial').val()).float();
+		var billetDiameterFinal = (calcForm.find('.billetDiameterFinal').val()).float();
+		var billetWallThicknessInitial = (calcForm.find('.billetWallThicknessInitial').val()).float();
+		var billetWallThicknessFinal = (calcForm.find('.billetWallThicknessFinal').val()).float();
+		if( (calcForm.find('.billetLengthInitial')).length ){
+			var billetLengthInitial = (calcForm.find('.billetLengthInitial').val()).float();
 		}
-		if( (calcForm.find('#pauseTime')).length ){
-			var pauseTime = (calcForm.find('#pauseTime').val()).float();
+		if( (calcForm.find('.pauseTime')).length ){
+			var pauseTime = (calcForm.find('.pauseTime').val()).float();
 		}
 		var activeRoute = new Route (billetDiameterInitial, billetDiameterFinal, billetWallThicknessInitial, billetWallThicknessFinal, billetLengthInitial, pauseTime);
 		return activeRoute;
@@ -286,6 +286,7 @@ var renderModule = (function(){
 		var table = $('<table></table>');
 		counter=(counter == undefined)?0:++counter;
 		table.attr("id",tableId+counter);
+		table.attr("class", "uk-align-center uk-table uk-table-striped uk-table-hover uk-table-divider");
 		var tableBody = $('<tbody></tbody>');
 		tableData.forEach(function(rowData) {
 			var row = $('<tr></tr>');
@@ -293,6 +294,7 @@ var renderModule = (function(){
 				var cell = $('<td></td>');
 				if(Array.isArray(cellData)){
 					cellData = addArraysToTable([cellData], tableId,counter);
+					cellData.attr("class", "")
 					cell.append(cellData);
 				}else{
 					cellData=$('<div></div>').append($('<div class="data"></div>').append(cellData)).html();
@@ -303,7 +305,7 @@ var renderModule = (function(){
 			tableBody.append(row);
 		});
 		table.append(tableBody);
-		$('body').append(table);
+		$('#calc-result').append(table);
 		transpose("#"+tableId+counter);
 		return table;
 	}
@@ -382,7 +384,7 @@ var renderModule = (function(){
 
 	function renderProductivityTable(){
 		var names = ["Коефіцієнт витяжки", "Лінійне зміщення", "Годинна продуктивність"];
-		var values = serviceModule.roundArrayValues(Object.values(productivity));
+		var values = serviceModule.roundNumericArrayValues(Object.values(productivity));
 		var suffixes = ["мм", "--", "м/год"];
 		addArraysToTable([names, values, suffixes], "domProductivityTable");
 	}
@@ -406,8 +408,7 @@ var renderModule = (function(){
 
 var eventHandler = (function(){
 
-	var calcInstrument = $("#calcInstrument");
-	calcInstrument.on('click', calcInstrumentHandler);
+	$(document).on('click', '#calcInstrument', calcInstrumentHandler);
 
 	function calcInstrumentHandler(){
 
@@ -425,8 +426,7 @@ var eventHandler = (function(){
 		renderModule.renderGuidePlaneProfileTable();
 	}
 
-	var calcDeformation = $("#calcDeformation");
-	calcDeformation.on('click', calcDeformationHandler);
+	$(document).on('click', '#calcDeformation', calcDeformationHandler);
 
 	function calcDeformationHandler(){
 
@@ -444,18 +444,14 @@ var eventHandler = (function(){
 		renderModule.renderDeformationTable();
 	}
 
-	var calcProductivity = $("#calcProductivity");
-	calcProductivity.on('click', calcProductivityHandler);
+	$(document).on('click', '#calcProductivity', calcProductivityHandler);
 
 	function calcProductivityHandler(){
+
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
 		var material = cacheDomModule.cacheMaterial();
 		
-		rollSize = calcModule.calcRollSize(mill, route);
-		guidePlane = calcModule.calcGuidePlaneSize(mill, route);
-		guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
-		deformation = calcModule.calcDeformation(mill, route, material);
 		productivity = calcModule.calcProductivity(mill, route);
 
 		renderModule.clearTables();
@@ -463,41 +459,10 @@ var eventHandler = (function(){
 		renderModule.renderProductivityTable();
 	}
 
-	// function calcHandler(){
-	// 	var mill = cacheDomModule.cacheMill();
-	// 	var route = cacheDomModule.cacheRoute();
-	// 	var material = cacheDomModule.cacheMaterial();
-		
-	// 	rollSize = calcModule.calcRollSize(mill, route);
-	// 	guidePlane = calcModule.calcGuidePlaneSize(mill, route);
-	// 	guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
-	// 	deformation = calcModule.calcDeformation(mill, route, material);
-	// 	productivity = calcModule.calcProductivity(mill, route);
-
-
-	// 	renderModule.clearTables();
-
-	// 	renderModule.renderRollSizeTable();
-	// 	renderModule.renderGuidePlaneTable();
-	// 	renderModule.renderGuidePlaneProfileTable();
-	// 	renderModule.renderDeformationTable();
-	// 	renderModule.renderProductivityTable();
-
-	// }
-
-	var clearBtn = $("#clearCalc");
-	clearBtn.on('click', clearHandler);
+	$(document).on('click', '#clearCalc', clearHandler);
 
 	function clearHandler(){
 		renderModule.clearTables();
 	}
 
 })();
-
-// test objects
-
-// var millOne =  new RollingMill(82, 0.5, 60, 3, 455, 210, 69, 12, 45, 1.6, 4.55);
-
-// var routeOne = new Route(17.5, 16.3, 0.7, 0.35);
-
-// var materialOne = new Material(660, 720, 693, 756);
