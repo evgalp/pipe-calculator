@@ -44,7 +44,6 @@ gulp.task('concat-libs', function() {
 gulp.task('concat-calc', function() {
 	return gulp.src([
 		'js/calc/calc.js',
-		'js/calc/genericForm.js',
 		'js/calc/validationRules.js'
 		])
 	.pipe(concat('calc.min.js'))

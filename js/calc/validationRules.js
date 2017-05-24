@@ -1,8 +1,8 @@
 $(document).ready(function(){
 
   (function(){
-    $('#calcForm input').on('keyup blur', function () {
-      if ($('#calcForm').valid()) {
+    $('#calcFormInner input').on('keyup blur', function () {
+      if ($('#calcFormInner').valid()) {
           $('button.calc-btn').prop('disabled', false);
       } else {
           $('button.calc-btn').prop('disabled', 'disabled');
@@ -32,8 +32,8 @@ $(document).ready(function(){
   });
 
   (function millBasedValidation(){
-  	var calcForm = $('#calcForm');
-  	calcForm.validate({
+  	var calcFormInner = $('#calcFormInner');
+  	calcFormInner.validate({
   		rules: {
   			"billetDiameterInitial": {
   				required: true,
@@ -41,6 +41,15 @@ $(document).ready(function(){
   					if($('.millSelect').val() == 'mill_8_15'){
   						return [9, 17]
   					}
+            if($('.millSelect').val() == 'mill_15_30'){
+              return [16, 33]
+            }
+            if($('.millSelect').val() == 'mill_30_60'){
+              return [31.5, 65]
+            }
+            if($('.millSelect').val() == 'mill_60_120'){
+              return [62, 168]
+            }
   				}
   			},
   			"billetDiameterFinal": {
@@ -49,6 +58,15 @@ $(document).ready(function(){
   					if($('.millSelect').val() == 'mill_8_15'){
   						return [8, 15]
   					}
+            if($('.millSelect').val() == 'mill_15_30'){
+              return [15, 30]
+            }
+            if($('.millSelect').val() == 'mill_30_60'){
+              return [30, 60]
+            }
+            if($('.millSelect').val() == 'mill_60_120'){
+              return [60, 120]
+            }
   				}
   			},
   			"billetWallThicknessInitial": {
@@ -57,6 +75,15 @@ $(document).ready(function(){
   					if($('.millSelect').val() == 'mill_8_15'){
   						return [0.08, 1.5]
   					}
+            if($('.millSelect').val() == 'mill_15_30'){
+              return [0.15, 1.5]
+            }
+            if($('.millSelect').val() == 'mill_30_60'){
+              return [0.3, 4]
+            }
+            if($('.millSelect').val() == 'mill_60_120'){
+              return [0.6, 6]
+            }
   				}
   			},
   			"billetWallThicknessFinal": {
@@ -65,10 +92,33 @@ $(document).ready(function(){
   					if($('.millSelect').val() == 'mill_8_15'){
   						return [0.08, 1.5]
   					}
+            if($('.millSelect').val() == 'mill_15_30'){
+              return [0.15, 1.5]
+            }
+            if($('.millSelect').val() == 'mill_30_60'){
+              return [0.3, 4]
+            }
+            if($('.millSelect').val() == 'mill_60_120'){
+              return [0.6, 6]
+            }
   				}
   			},
   			"billetLengthInitial": {
-  				required: true
+  				required: true,
+          range: function(elem){
+            if($('.millSelect').val() == 'mill_8_15'){
+              return [1, 4]
+            }
+            if($('.millSelect').val() == 'mill_15_30'){
+              return [2.5, 5]
+            }
+            if($('.millSelect').val() == 'mill_30_60'){
+              return [2.5, 5]
+            }
+            if($('.millSelect').val() == 'mill_60_120'){
+              return [2.5, 5]
+            }
+          }
   			},
   			pauseTime: {
   				required: true

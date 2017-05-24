@@ -39,6 +39,37 @@ header.main-header{
 
 .calc-menu{
 	.calc-tabs{
+		list-style-type: none;
+		li{
+			flex: 1;
+    	min-width: 0;
+    	flex-basis: 1px;
+    	a{
+				display: block;
+				text-align: center;
+				padding: 15px 20px;
+				background: #fff;
+				color: #999;
+				border-bottom: 2px solid transparent;
+				font-size: 12px;
+				text-transform: uppercase;
+				transition: color .1s ease-in-out;
+				line-height: 20px;
+				&:hover{
+					text-decoration: none;
+					color: #222;
+					border-bottom: 1px solid;
+    			border-color: #1e87f0;
+				}
+    	}
+		}
+		li.active{
+			a{
+				color: #222;
+				border-bottom: 1px solid;
+    		border-color: #1e87f0;
+			}
+		}
 		&:before{
 			left: 0;
 		}
@@ -48,13 +79,12 @@ header.main-header{
 	}
 }
 
+.help-block{
+	color: #f0506e;
+}
+
 .calc-form{
-	max-width: 500px;
-	button{
-		&:hover{
-			cursor: pointer;
-		}
-	}
+	max-width: 500px
 }
 
 .calc-result{
@@ -125,8 +155,4 @@ header.main-header{
 			content: 'Параметри продуктивності';
 		}
 	}
-}
-
-label.help-block{
-	color: #f0506e;
 }

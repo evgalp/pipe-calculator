@@ -150,7 +150,7 @@ var calcModule = (function(){
 		});
 		rollSize.delta = (guidePlaneProfile.tp - guidePlaneProfile.t[0]) / Math.sin(rollSize.alpha);
 		rollSize.gamma = Math.asin(rollSize.delta / route.billetDiameterFinal);
-		rollSize.reductionRadius = (route.billetDiameterFinal / 2) * (1 + ( (4 * Math.pow( (Math.cos(rollSize.alpha + rollSize.gamma)), 2) - 1 ) / (2 - 2 * Math.cos(rollSize.beta) * Math.cos(rollSize.alpha + rollSize.gamma)) ));
+		rollSize.reductionRadius = (route.billetDiameterFinal / 2) * (1 + ( (4 * Math.pow((Math.cos(rollSize.alpha + rollSize.gamma)), 2) - 1 ) / (2 - 2 * Math.cos(rollSize.beta) * Math.cos(rollSize.alpha + rollSize.gamma)) ));
 		return guidePlaneProfile;
 	}
 
@@ -171,11 +171,11 @@ var calcModule = (function(){
 		deformation.epsilonTwo = (1 - 1 / deformation.elongationTwo) * 100;
 		deformation.k1 = 1.05 * material.sigmaB1;
 		deformation.k2 = 1.05 * material.sigmaB2;
-		deformation.forwardSlipZonePressureOne = (deformation.k1 / deformation.deltaOne) * ((deformation.deltaOne - 1) * Math.pow( ((guidePlaneProfile.tp / guidePlaneProfile.t[0]), deformation.delta) ) - 1);
-		deformation.backwardSlipZonePressureOne = (deformation.k1 / deformation.deltaOne) * ((deformation.deltaOne - 1) * Math.pow( ((guidePlaneProfile.tp / guidePlaneProfile.t[0]), deformation.deltaOne) ) - 1);
-		deformation.backwardSlipZonePressureTwo = (deformation.k2 / deformation.deltaTwo) * ((deformation.deltaTwo - 1) * Math.pow( ((guidePlaneProfile.t[0] / guidePlaneProfile.t[1]), deformation.deltaTwo) ) - 1);
-		deformation.forwardSlipZonePressureOne = (deformation.k1 / deformation.deltaOne) * ((deformation.deltaOne + 1) * Math.pow( ((guidePlaneProfile.t[0] / guidePlaneProfile.t[1]), deformation.deltaOne) ) - 1);
-		deformation.forwardSlipZonePressureTwo = (deformation.k2 / deformation.deltaTwo) * ((deformation.deltaTwo + 1) * Math.pow( ((guidePlaneProfile.t[1] / guidePlaneProfile.t[2]), deformation.deltaTwo) ) - 1);
+		deformation.forwardSlipZonePressureOne = (deformation.k1 / deformation.deltaOne) * ((deformation.deltaOne - 1) * Math.pow((guidePlaneProfile.tp / guidePlaneProfile.t[0]), deformation.delta) - 1);
+		deformation.backwardSlipZonePressureOne = (deformation.k1 / deformation.deltaOne) * ((deformation.deltaOne - 1) * Math.pow((guidePlaneProfile.tp / guidePlaneProfile.t[0]), deformation.deltaOne) - 1);
+		deformation.backwardSlipZonePressureTwo = (deformation.k2 / deformation.deltaTwo) * ((deformation.deltaTwo - 1) * Math.pow((guidePlaneProfile.t[0] / guidePlaneProfile.t[1]), deformation.deltaTwo) - 1);
+		deformation.forwardSlipZonePressureOne = (deformation.k1 / deformation.deltaOne) * ((deformation.deltaOne + 1) * Math.pow((guidePlaneProfile.t[0] / guidePlaneProfile.t[1]), deformation.deltaOne) - 1);
+		deformation.forwardSlipZonePressureTwo = (deformation.k2 / deformation.deltaTwo) * ((deformation.deltaTwo + 1) * Math.pow((guidePlaneProfile.t[1] / guidePlaneProfile.t[2]), deformation.deltaTwo) - 1);
 		deformation.p1 = 0.5 * (deformation.backwardSlipZonePressureOne + deformation.forwardSlipZonePressureOne);
 		deformation.p2 = 0.5 * (deformation.backwardSlipZonePressureTwo + deformation.forwardSlipZonePressureTwo);
 
@@ -215,6 +215,12 @@ var cacheDomModule = (function(){
 		}
 		if(selectedMill == 'mill_15_30'){
 			var activeMill = new RollingMill(82, 0.5, 60, 3, 455, 210, 69, 12, 45, 1.6, 4.55, 1.055, 170, 90, 12);
+		}
+		if(selectedMill == 'mill_30_60'){
+			var activeMill = new RollingMill(131, 0.8, 60, 3, 607, 207, 69, 12, 65, 1.5, 4.55, 1.035, 170, 90, 12);
+		}
+		if(selectedMill == 'mill_60_120'){
+			var activeMill = new RollingMill(240, 1.2, 45, 4, 755, 320, 69, 12, 100, 1.6, 4.55, 1.020, 170, 70, 12);
 		}
 		return activeMill;
 	}
@@ -348,6 +354,11 @@ var renderModule = (function(){
 		}
 	}
 
+	function clearByBtn(){
+		var clearCalc = document.getElementById("clearCalc");
+
+		clearCalc.addEventListener('click', clearTables());
+	}
 
 	function renderRollSizeTable(){
 		var names = ["Діаметр реборд", "Діаметр дна ролика", "Мінімальна товщина реборд", "Діаметр, що катає", "\u03B1", "\u03B2", "\u03B4", "\u03B3", "Радіус випуску"];
@@ -380,7 +391,7 @@ var renderModule = (function(){
 	function renderProductivityTable(){
 		var names = ["Коефіцієнт витяжки", "Лінійне зміщення", "Годинна продуктивність"];
 		var values = serviceModule.roundNumericArrayValues(Object.values(productivity));
-		var suffixes = ["мм", "--", "м/год"];
+		var suffixes = ["--", "мм", "м/год"];
 		addArraysToTable([names, values, suffixes], "domProductivityTable");
 	}
 
@@ -389,6 +400,7 @@ var renderModule = (function(){
 		addArraysToTable: addArraysToTable,
 		transpose: transpose,
 		clearTables: clearTables,
+		clearByBtn: clearByBtn,
 		renderRollSizeTable: renderRollSizeTable,
 		renderGuidePlaneTable: renderGuidePlaneTable,
 		renderGuidePlaneProfileTable: renderGuidePlaneProfileTable,
@@ -452,8 +464,6 @@ var eventHandler = (function(){
 
 		renderModule.renderProductivityTable();
 	}
-
-	$('#clearCalc').on('click', clearHandler);
 
 	$(document).on('click', '#clearCalc', clearHandler);
 
