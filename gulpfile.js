@@ -34,7 +34,8 @@ gulp.task('concat-libs', function() {
 		'js/libs/jquery.validate.min.js',
 		'js/libs/validator_messages_uk.js',
 		'js/libs/uikit.min.js',
-		'js/libs/uikit-icons.min.js'
+		'js/libs/uikit-icons.min.js',
+		'js/libs/scroll-top.js'
 		])
 	.pipe(concat('libs.min.js'))
 	.pipe(uglify())
