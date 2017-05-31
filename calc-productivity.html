@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Cold Rolling</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="icon" href="favicon.png">
+	<link rel="stylesheet" href="css/uikit.min.css">
+	<link rel="stylesheet" href="css/style.min.css">
+</head>
+<body>
+
+	<header class="uk-container-expand uk-flex uk-flex-middle uk-flex-between uk-background-primary uk-padding uk-light uk-text-large">
+		<h2 class="uk-margin-remove uk-text-large">Розрахунки для станів ХПТР</h2>
+		<div class="header-nav-container uk-flex uk-flex-middle uk-flex-between">
+			<a class="link-icon uk-margin-medium-right" href="code.html"><span uk-icon="icon: code; ratio: 1.3"></span><span class="text">code</span></a>
+			<a href="index.html" class="uk-margin-small-right" uk-icon="icon: home; ratio: 2"></a>
+		</div>
+	</header>
+
+	<section  id="calcForm" class="calc-menu uk-container-expand">
+		<ul class="calc-tabs uk-padding-remove uk-flex uk-child-width-expand uk-margin-remove">
+	    <li class="uk-padding-remove"><a href="calc-instrument.html" class="uk-link">Калібровка інструменту</a></li>
+	    <li class="uk-padding-remove"><a href="calc-deformation.html" class="uk-link">Енергосилові параметри</a></li>
+	    <li class="uk-padding-remove active"><a href="calc-productivity.html" class="uk-link">Продуктивність</a></li>
+		</ul>
+
+		<div class="uk-grid-large uk-grid-collapse calc-productivity">
+			<div class="uk-background-muted uk-padding">
+				<form id="calcFormInner" class="calc-form uk-width-1-2 uk-align-center">
+					<div class="uk-margin uk-flex uk-flex-between">
+							<label class="uk-form-label" for="millSelect">Тип стану ХПТР:</label> 
+							<div class="uk-form-controls uk-form-width-medium">
+								<select name="millSelect" class="uk-select millSelect">
+									<option value="mill_8_15">ХПТР 8-15</option>
+									<option value="mill_15_30">ХПТР 15-30</option>
+									<option value="mill_30_60">ХПТР 30-60</option>
+									<option value="mill_60_120">ХПТР 60-120</option>
+								</select>
+							</div>
+						</div>
+					<div class="uk-margin uk-flex uk-flex-between">
+						<label class="uk-form-label" for="billetDiameterInitial">Початковий діаметр, мм:</label> 
+						<div class="uk-form-controls uk-form-width-medium"> <input name="billetDiameterInitial" class="uk-input billetDiameterInitial" type="text" placeholder="Початковий діаметр"> </div>
+					</div>
+					<div class="uk-margin uk-flex uk-flex-between">
+						<label class="uk-form-label" for="billetDiameterFinal">Кінцевий діаметр, мм:</label> 
+						<div class="uk-form-controls uk-form-width-medium"> <input name="billetDiameterFinal" class="uk-input billetDiameterFinal" type="text" placeholder="Кінцевий діаметр"> </div>
+					</div>
+					<div class="uk-margin uk-flex uk-flex-between">
+						<label class="uk-form-label" for="billetWallThicknessInitial">Початкова товщина стінки, мм:</label> 
+						<div class="uk-form-controls uk-form-width-medium"> <input name="billetWallThicknessInitial" class="uk-input billetWallThicknessInitial" type="text" placeholder="Початкова товщина стінки"> </div>
+					</div>
+					<div class="uk-margin uk-flex uk-flex-between">
+						<label class="uk-form-label" for="billetWallThicknessFinal">Кінцева товщина стінки, мм:</label> 
+						<div class="uk-form-controls uk-form-width-medium"> <input name="billetWallThicknessFinal" class="uk-input billetWallThicknessFinal" type="text" placeholder="Кінцева товщина стінки"> </div>
+					</div>
+					<div class="uk-margin uk-flex uk-flex-between">
+						<label class="uk-form-label" for="billetLengthInitial">Довжина заготовки, м:</label> 
+						<div class="uk-form-controls uk-form-width-medium"> <input name="billetLengthInitial" class="uk-input billetLengthInitial" type="text" placeholder="Довжина заготовки"> </div>
+					</div>
+					<div class="uk-margin uk-flex uk-flex-between">
+						<label class="uk-form-label" for="pauseTime">Час пауз, с:</label> 
+						<div class="uk-form-controls uk-form-width-medium"> <input name="pauseTime" class="uk-input pauseTime" type="text" placeholder="Час пауз"> </div>
+					</div>
+					<div class="uk-margin uk-flex uk-flex-between">
+						<button type="button" disabled="disabled" id="calcProductivity" name="calcProductivity" class="calc-btn uk-button uk-button-primary">Виконати розрахунки</button>
+						<div id="clearCalc" name="clearCalc" class="uk-button uk-button-secondary">Очистити результати</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+	<section class="uk-background">
+		<div id="calc-result" class="calc-result"></div>
+	</section>
+
+	<script type="text/javascript" src="js/libs.min.js"></script>
+	<script type="text/javascript" src="js/calc.min.js"></script>
+	
+</body>
+</html>

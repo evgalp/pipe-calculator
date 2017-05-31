@@ -1,0 +1,229 @@
+body{
+	a{
+		&:hover{
+			text-decoration: none;
+			opacity: .9;
+		}
+	}
+}
+
+@primaryColor: #1e87f0;
+
+header{
+	.link-icon{
+		display: inline-flex;
+		flex-direction: column;
+		text-align: center;
+	}
+	span.text{
+		font-size: 12px;
+	}
+}
+
+header.main-header{
+	height: 13.7vh;
+}
+
+.main-menu{
+	.button{
+		height: 40vh;
+		box-shadow: inset 0 0 0 1px #ccc;
+		&:hover{
+			background-color: #F8F8FE;
+			cursor: pointer;
+		}
+		a{
+			&:hover{
+				text-decoration: none;
+			}
+		}
+		svg{
+			width: 80px;
+			height: 80px;
+			fill: @primaryColor;
+			path{
+				stroke: @primaryColor;
+			}
+		}
+	}
+}
+
+.info-main{
+	p{
+		text-align: justify;
+	}
+	.table-container{
+		table{
+			tr{
+				td{
+					&:first-child{
+						width: 20%;
+						min-width: 20%;
+					}
+				}
+			}
+		}
+	}
+	.video-container{
+		position: relative;
+		video{
+			width: 100%;
+			height: 300px;
+		}
+	}
+}
+
+.models-main{
+	.uk-card{
+		.uk-card-media-left,
+		.uk-card-media-right{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		img{
+			width: auto;
+			height: auto;
+			max-height: 300px;
+		}
+	}
+}
+
+.img-modal{
+	.uk-modal-dialog{
+		width: auto;
+		height: auto;
+	}
+}
+
+.calc-menu{
+	.calc-tabs{
+		list-style-type: none;
+		li{
+			flex: 1;
+    	min-width: 0;
+    	flex-basis: 1px;
+    	a{
+				display: block;
+				text-align: center;
+				padding: 15px 20px;
+				background: #fff;
+				color: #999;
+				border-bottom: 2px solid transparent;
+				font-size: 12px;
+				text-transform: uppercase;
+				transition: color .1s ease-in-out;
+				line-height: 20px;
+				&:hover{
+					text-decoration: none;
+					color: #222;
+					border-bottom: 1px solid;
+    			border-color: #1e87f0;
+				}
+    	}
+		}
+		li.active{
+			a{
+				color: #222;
+				border-bottom: 1px solid;
+    		border-color: #1e87f0;
+			}
+		}
+		&:before{
+			left: 0;
+		}
+		a{
+			padding: 20px 0;
+		}
+	}
+}
+
+.help-block{
+	color: #f0506e;
+}
+
+.calc-form{
+	max-width: 500px
+}
+
+.calc-result{
+	.uk-table{
+		position: relative;
+		margin: 60px auto;
+    max-width: 50%;
+    display: table;
+		&:before{
+			display: none;
+			content: '';
+	    background: @primaryColor;
+	    display: block;
+	    color: #fff;
+	    position: absolute;
+	    top: -34px;
+	    left: -1px;
+	    padding: 5px 5px 5px 5px;
+	    width: 100%;
+	    padding: 5px 0px 5px 5px;
+	    width: 99.0%;
+			text-align: center;
+		}
+		td{
+			vertical-align: middle;
+
+		}
+		tr{
+			td{
+				table{
+					tr{
+						background: inherit;
+						td{
+							padding: 0;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	#domRollSizeTable0{
+		&:before{
+			content: 'Параметри роликів'
+		}
+	}
+
+	#domGuidePlaneTable0{
+		&:before{
+			content: 'Параметри опорних планок'
+		}
+	}
+
+	#domGuidePlaneProfileTable0{
+		&:before{
+			content: 'Параметри профілю опорних планок'
+		}
+	}
+
+	#domDeformationTable0{
+		&:before{
+			content: 'Параметри деформації';
+		}
+	}
+
+	#domProductivityTable0{
+		&:before{
+			content: 'Параметри продуктивності';
+		}
+	}
+}
+
+
+.scrollTop {
+  display: none;
+  position: absolute;
+  right: 50px;
+  bottom: 50px;
+  width: 50px;
+  height: 50px;
+  background: url(../img/gotop.png) no-repeat;
+  background-size: 50px 50px;
+}
