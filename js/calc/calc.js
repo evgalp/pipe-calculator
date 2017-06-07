@@ -20,7 +20,6 @@ function RollingMill(baseRollDiameter, sigmaHalf, alpha, n, carriageStrokeLength
 	this.reductionZoneLength = reductionZoneLength;
 	this.frequency = frequency;
 	this.mMax = mMax;
-
 	return this;
 }
 
@@ -30,16 +29,13 @@ function Route(billetDiameterInitial, billetDiameterFinal, billetWallThicknessIn
 	this.billetWallThicknessInitial = billetWallThicknessInitial;
 	this.billetWallThicknessFinal = billetWallThicknessFinal;
 	this.billetLengthInitial = billetLengthInitial;
-
 	if(this.billetWallThicknessInitial <= 1){
 		this.sigmaT = 0.12;
 	}
 	if(this.billetWallThicknessInitial > 1){
 		this.sigmaT = 0.10;
 	}
-
 	this.pauseTime = pauseTime;
-
 	return this;
 }
 
@@ -64,7 +60,6 @@ var serviceModule = (function(){
 
 	function roundNumericArrayValues(array, precision){
 		var roundedArray = [];
-
 		array.forEach(function round(elem){
 			if(isNumber(elem)) {
 				roundedArray.push(elem.toFixed(precision));
@@ -74,7 +69,6 @@ var serviceModule = (function(){
 				roundedArray.push(elem);
 			}
 		})
-
 		return roundedArray;
 	}
 
@@ -102,7 +96,15 @@ var calcModule = (function(){
 	function calcGuidePlaneSize(mill, route){
 		var guidePlane = {};
 		guidePlane.workLength = (mill.carriageStrokeLength) / (1 + mill.DkDcMax);
-		guidePlane.lb = mill.L - guidePlane.workLength;
+
+		// horrible hack to handle negative values
+		var lb = mill.L - guidePlane.workLength;
+		if (lb >= 0) {
+			guidePlane.lb = lb;
+		} else {
+			guidePlane.lb = -lb;
+		}
+
 		guidePlane.ln = mill.carriageStrokeLengthRotational / (1 + mill.DkDcMax);
 		guidePlane.Yn = (route.billetDiameterInitial / 2) - (route.billetDiameterFinal / 2);
 		guidePlane.Yp = (route.billetWallThicknessInitial) - (route.billetWallThicknessFinal);
@@ -183,9 +185,7 @@ var calcModule = (function(){
 		var productivity = {};
 
 		productivity.elongationRatio = ( (route.billetDiameterInitial - route.billetWallThicknessInitial) * route.billetWallThicknessInitial ) / ( (route.billetDiameterFinal - route.billetWallThicknessFinal) * route.billetWallThicknessFinal );
-
 		productivity.linearShift = mill.reductionZoneLength * ( productivity.elongationRatio / (productivity.elongationRatio - 1) ) * Math.log(mill.mx);
-
 		productivity.hourProductivity = 60 / ( (1000 / (productivity.linearShift * mill.frequency)) + (route.pauseTime / (60 * productivity.elongationRatio * mill.reductionZoneLength)) )
 
 		return productivity;
@@ -414,16 +414,12 @@ var eventHandler = (function(){
 	$(document).on('click', '#calcInstrument', calcInstrumentHandler);
 
 	function calcInstrumentHandler(){
-
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
-
 		rollSize = calcModule.calcRollSize(mill, route);
 		guidePlane = calcModule.calcGuidePlaneSize(mill, route);
 		guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
-
 		renderModule.clearTables();
-
 		renderModule.renderRollSizeTable();
 		renderModule.renderGuidePlaneTable();
 		renderModule.renderGuidePlaneProfileTable();
@@ -432,33 +428,25 @@ var eventHandler = (function(){
 	$(document).on('click', '#calcDeformation', calcDeformationHandler);
 
 	function calcDeformationHandler(){
-
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
 		var material = cacheDomModule.cacheMaterial();
-		
 		rollSize = calcModule.calcRollSize(mill, route);
 		guidePlane = calcModule.calcGuidePlaneSize(mill, route);
 		guidePlaneProfile = calcModule.calcGuidePlaneProfile(mill, route);
 		deformation = calcModule.calcDeformation(mill, route, material);
-
 		renderModule.clearTables();
-
 		renderModule.renderDeformationTable();
 	}
 
 	$(document).on('click', '#calcProductivity', calcProductivityHandler);
 
 	function calcProductivityHandler(){
-
 		var mill = cacheDomModule.cacheMill();
 		var route = cacheDomModule.cacheRoute();
 		var material = cacheDomModule.cacheMaterial();
-		
 		productivity = calcModule.calcProductivity(mill, route);
-
 		renderModule.clearTables();
-
 		renderModule.renderProductivityTable();
 	}
 
