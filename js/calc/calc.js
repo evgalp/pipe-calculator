@@ -227,6 +227,34 @@ var cacheDomModule = (function(){
 		if(selectedMaterial == 'steel_20A'){
 			var activeMaterial = new Material(660, 720);
 		}
+		if(selectedMaterial == 'steel_10G2'){
+			var activeMaterial = new Material(250, 433);
+		}
+		if(selectedMaterial == 'steel_09G2C'){
+			var activeMaterial = new Material(350, 448);
+		}
+		if(selectedMaterial == 'steel_20X'){
+			var activeMaterial = new Material(300, 467);
+		}
+		if(selectedMaterial == 'steel_40X'){
+			var activeMaterial = new Material(330, 507);
+		}
+		if(selectedMaterial == 'steel_35XM'){
+			var activeMaterial = new Material(850, 654);
+		}
+		if(selectedMaterial == 'steel_40XH'){
+			var activeMaterial = new Material(460, 565);
+		}
+		if(selectedMaterial == 'steel_30XGC'){
+			var activeMaterial = new Material(360, 497);
+		}
+		if(selectedMaterial == 'steel_60C2'){
+			var activeMaterial = new Material(1200, 771);
+		}
+		if(selectedMaterial == 'steel_SH15'){
+			var activeMaterial = new Material(380, 497);
+		}
+
 		return activeMaterial;
 	}
 
